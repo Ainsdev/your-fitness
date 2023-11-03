@@ -1,0 +1,340 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator zod {
+  provider = "zod-prisma"
+}
+
+datasource db {
+  provider     = "mysql"
+  relationMode = "prisma"
+  url          = env("DATABASE_URL")
+}
+
+// MODELS OF AUTH AND ADMIN
+model Computer {
+  id    String @id @default(cuid())
+  brand String
+  cores Int
+}
+
+model password_reset_token {
+  id      String
+  expires BigInt @id
+  user_id String
+  user    User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  @@index([user_id])
+}
+
+model Session {
+  id             String @id @unique
+  user_id        String
+  active_expires BigInt
+  idle_expires   BigInt
+  user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  @@index([user_id])
+}
+
+model Key {
+  id              String  @id @unique
+  hashed_password String?
+  user_id         String
+  user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  @@index([user_id])
+}
+
+// MODELS OF DB
+model User {
+  id                   String                 @id @unique
+  username             String
+  name                 String?
+  email                String?                @unique
+  phone                String?
+  rut                  String?                @unique
+  email_notifications  Boolean                @default(true)
+  // authentication
+  auth_session         Session[]
+  key                  Key[]
+  password_reset_token password_reset_token[]
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @default(now())
+  // teamMembers          TeamMember[]
+  // invitations          Invitation[]
+  trainer_active       Boolean                @default(false)
+  trainer              Trainer[]
+  review               Review[]
+  contract             Contract[]
+  // suscription          Suscription[]
+  // Credits
+  credits              Credit[]
+  creditPurchase       CreditPurchase[]
+  // add location to user for futures features like: train with other users or create a group
+}
+
+model Trainer {
+  id                  String          @id @default(uuid())
+  userId              String
+  user                User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @default(now())
+  plan                String          @default("BASIC") // BASIC, PREMIUM, ENTERPRISE, ALL 
+  isAvailable         Boolean         @default(true) // If the trainer is aviable to take new students
+  active              Boolean         @default(true) // If the trainer is active or not
+  bank_active         Boolean         @default(false) // If the trainer has linked his bank account
+  // Location
+  location            String // Location of the trainer e.g "Las Condes, Santiago, Chile"
+  // Characteristics
+  level               Int             @default(1) // Level of the trainer (Experience)
+  specializations     Int // Types of sports that the trainer can teach e.g 1234 = 1: Football, 2: Basketball, 3: Tennis, 4: Volleyball
+  sub_specializations Int // Types of sports that the trainer can teach e.g 1234 = 1: Football, 2: Basketball, 3: Tennis, 4: Volleyball
+  methodology         String?         @default("ALL") // Methodology of the trainer e.g ALL, ONLINE, PRESENCIAL, IN GROUP
+  phone               String
+  img                 String?
+  social_medias       String? // [] of social medias
+  //Contract
+  free_days           Int             @default(1) // Number of free sessions that the trainer includes
+  default_days        Int             @default(3) // Number of days that the trainer recommends to train with him per week
+  default_hours       Int             @default(2) // Number of hours that the trainer recommends to train with him per session
+  // discount_at         Int             @default(100) // Minimum number of students to apply a discount
+  // discount            Int             @default(0) // Discount that the trainer applies when the number of students is equal or greater than discount_at
+  //Texts
+  title               String
+  bio                 String?
+  course_info         String?
+  review              Review[]
+  // Site      Site[]
+  contract            Contract[]
+  trainerPayout       TrainerPayout[]
+  bankAccount         BankAccount[]
+  // ContractGroup       TrainerGroup[]
+
+  @@index([userId])
+}
+
+model Contract {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  finishAt  DateTime // Date when the contract expires, make a function to calculate when is the expiration date
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trainerId String
+  trainer   Trainer  @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+  // 
+  status    Boolean  @default(true) // If the contract is active live or not
+  canceled  Boolean  @default(false) // If the contract get canceled or not (By the user)
+  plan      String   @default("BASIC") // BASIC, PREMIUM, ENTERPRISE, ALL
+  days      Int? // Number of days that the contract includes e.g 135 = 1: Monday, 3: Wednesday, 5: Friday
+  hours     Int? // Number of hours that the contract includes e.g 12 = 1: 1 hour, 2: 2 hours
+  credits   Int // Number of credits that the contract includes
+
+  // The credits show to the trainer to make a payout with a query with this restrictions:  1. The contract is canceled=false 2. the contract has finished 3. trainerId = trainerId 
+
+  @@index([trainerId])
+  @@index([userId])
+}
+
+// model TrainerGroup {
+//   id          String   @id @default(uuid())
+//   createdAt   DateTime @default(now())
+//   updatedAt   DateTime @default(now())
+//   finishAt    DateTime // Date when the contract expires, make a function to calculate when is the expiration date
+//   trainerId   String
+//   trainer     Trainer  @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+//   // 
+//   title       String
+//   description String?
+//   img         String?
+//   clients     Int      @default(0) // Number of users that is in the plan
+//   max_clients Int      @default(5) // Number of max users that the group can have
+//   status      Boolean  @default(true) // If the contract is active live or not
+//   location    String? // Location of the group e.g "Cancha de futbol 5, Las Condes, Santiago, Chile"
+//   days        Int? // Number of days that the contract includes e.g 135 = 1: Monday, 3: Wednesday, 5: Friday
+//   hour        Int? // Number of hours that the contract includes e.g 12AM or 21PM
+//   //
+//   discount_at Int      @default(3) // Minimum number of students to apply a discount
+//   discount    Int      @default(0) // Discount that the trainer applies when the number of students is equal or greater than discount_at
+//   price       Float    @default(0) // Price of the group (Free or paid)
+//   credits     Int      @default(0) // Number of credits that alredy have been used
+
+//   @@index([trainerId])
+// }
+
+model Review {
+  id        String   @id @default(uuid())
+  userId    String
+  trainerId String
+  rating    Float
+  comment   String
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trainer Trainer @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([trainerId])
+}
+
+// PAYMENTS
+
+model Credit {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  credits   Int      @default(0)
+
+  @@index([userId])
+}
+
+model CreditPurchase {
+  id            String   @id @default(uuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount        Float    @default(0) // Amount of money that the user paid
+  credits       Int      @default(0) // Amount of credits that the user bought
+  transactionId String? // ID of the transaction
+  status        String   @default("register") // register, pending, success, rejected
+
+  @@index([userId])
+}
+
+// model Suscription {
+//   id                 String   @id @default(uuid())
+//   createdAt          DateTime @default(now())
+//   endsAt             DateTime
+//   userId             String
+//   user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+//   payku_id           String   @unique
+//   payku_subscription String?  @unique
+//   plan               String   @default("BASIC")
+//   quantity           Int      @default(1) // Number of users that is in the plan
+//   billingCycleStart  Int? // day of the month when the billing cycle starts
+//   monitoringId       String?  @unique // cron job ID for monitoring
+// }
+
+model TrainerPayout {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  trainerId String
+  trainer   Trainer  @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+  amount    Float
+  status    String   @default("PENDING") // PENDING, PAID, REJECTED
+
+  @@index([trainerId])
+}
+
+model BankAccount {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  trainerId String
+  trainer   Trainer  @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+  bank      String
+
+  @@index([trainerId])
+}
+
+// model Site {
+//   id           String   @id @default(cuid())
+//   name         String?
+//   description  String?
+//   logo         String?  @default("https://public.blob.vercel-storage.com/eEZHAoPTOBSYGBE3/JRajRyC-PhBHEinQkupt02jqfKacBVHLWJq7Iy.png")
+//   color        String?  @default("")
+//   image        String?  @default("https://public.blob.vercel-storage.com/eEZHAoPTOBSYGBE3/hxfcV5V-eInX3jbVUhjAt1suB7zB88uGd1j20b.png")
+//   subdomain    String?  @unique
+//   customDomain String?  @unique
+//   createdAt    DateTime @default(now())
+//   updatedAt    DateTime @updatedAt
+//   trainer      Trainer  @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+//   trainerId    String
+//   // features     Feature[]
+//   // posts        Post[]
+
+//   @@index([trainerId])
+// }
+
+// model Feature {
+//   id        String   @id @default(cuid())
+//   name      String?
+//   icon      String?
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+//   site      Site?    @relation(fields: [siteId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+//   siteId    String?
+
+//   @@index([siteId])
+// }
+
+// model Post {
+//   id          String   @id @default(cuid())
+//   title       String?
+//   description String?
+//   content     String?
+//   slug        String   @default(cuid())
+//   image       String?  @default("https://public.blob.vercel-storage.com/eEZHAoPTOBSYGBE3/hxfcV5V-eInX3jbVUhjAt1suB7zB88uGd1j20b.png")
+//   createdAt   DateTime @default(now())
+//   updatedAt   DateTime @updatedAt
+//   published   Boolean  @default(false)
+//   site        Site?    @relation(fields: [siteId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+//   siteId      String?
+//   User        User?    @relation(fields: [userId], references: [id])
+//   userId      String?
+
+//   @@unique([slug, siteId])
+//   @@index([siteId])
+// }
+
+// //TEAMS
+// model Team {
+//   id          String       @id @default(uuid())
+//   name        String
+//   slug        String       @unique
+//   domain      String?      @unique
+//   createdAt   DateTime     @default(now())
+//   updatedAt   DateTime     @default(now())
+//   members     TeamMember[]
+//   invitations Invitation[]
+// }
+
+// model TeamMember {
+//   id        String   @id @default(uuid())
+//   teamId    String
+//   userId    String
+//   role      String   @default("MEMBER")
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @default(now())
+
+//   team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+//   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+//   @@unique([teamId, userId])
+//   @@index([userId])
+// }
+
+// model Invitation {
+//   id        String   @id @default(uuid())
+//   teamId    String
+//   email     String
+//   token     String   @unique
+//   expires   DateTime
+//   invitedBy String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @default(now())
+
+//   user User @relation(fields: [invitedBy], references: [id], onDelete: Cascade)
+//   team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+//   @@unique([teamId, email])
+// }
