@@ -16,9 +16,9 @@ function Categories({
   return (
     <section
       id="categories"
-      className="flex w-full flex-col-reverse text-center gap-6 space-y-6 py-10 sm:gap-2 md:flex-col sm:px-20 "
+      className="flex w-full flex-col-reverse text-center gap-6 space-y-6 py-10 md:flex-col sm:px-20 2xl:px-72 mt-12 "
     >
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+      <div className="grid gap-4 grid-cols-2 md:grid-cols-3">
         {categories.map((category) => (
           <Link key={category.title} href={"categories/" + category.slug}>
             <div className="group relative overflow-hidden rounded-md">
@@ -46,14 +46,14 @@ function Categories({
       {landing && (
         <div className="mx-auto flex max-w-[58rem] flex-col items-center space-y-4 text-center">
           <h2 className="text-3xl font-bold leading-[1.1] sm:text-3xl">
-            Categorias
+            Personal Trainers
           </h2>
           <Balancer className="max-w-[46rem] leading-normal text-muted-foreground sm:text-lg sm:leading-7">
-            Explora a nuestros entrenadores y encuentra el que mejor se adapte a
+            Explora a nuestros mejores entrenadores y encuentra el que mejor se adapte a
             ti.
           </Balancer>
-          <Button variant="secondary" asChild size="lg" className="border-2">
-            <Link href="/categories">Explorar categorias</Link>
+          <Button variant="secondary" asChild size="lg" className="border-2 backdrop-filter-[blur(10px)]">
+            <Link href="/categories">Encuentra tu Asesor</Link>
           </Button>
         </div>
       )}

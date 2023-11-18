@@ -12,14 +12,7 @@ import {
   PageHeaderHeading,
   PageHeaderDescription,
 } from "@/components/page-header";
-import {
-  Key,
-  ReactElement,
-  JSXElementConstructor,
-  ReactNode,
-  ReactPortal,
-  PromiseLikeOfReactNode,
-} from "react";
+
 import { CategoryProps } from "@/lib/types";
 
 interface SubcategoryPageProps {
@@ -32,12 +25,12 @@ interface SubcategoryPageProps {
   };
 }
 
-// export function generateMetadata({ params }: CategoryPageProps) {
-//   return {
-//     title: toTitleCase(productCategories[params.category].title),
-//     description: `Buy products from the ${params.category} category`,
-//   }
-// }
+export function generateMetadata({ params }: SubcategoryPageProps) {
+  return {
+    title: params.subcategory,
+    description: `Encuentra los mejores entrenadores para ${params.subcategory}`,
+  };
+}
 
 export default async function CategoryPage({
   params,
@@ -58,7 +51,7 @@ export default async function CategoryPage({
         <PageHeaderHeading size="sm">{subcategory}</PageHeaderHeading>
         <PageHeaderDescription size="sm">Beneficios</PageHeaderDescription>
       </PageHeader>
-      <h1>PRODUCTS</h1>
+      <h1>Trainers</h1>
     </Shell>
   );
 }

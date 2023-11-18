@@ -1,5 +1,6 @@
 import AuthForm from "@/components/auth/Form";
 import Categories from "@/components/landing/categories";
+import FeatureA from "@/components/landing/feature-a";
 import HeroComponentA from "@/components/landing/hero-component-a";
 import { categoriesList } from "@/config/categories";
 import { getUserAuth } from "@/lib/auth/utils";
@@ -14,9 +15,9 @@ export default async function Home() {
       <div className="light-1"></div>
       <div className="light-2"></div>
       <div className="light-3"></div>
-
       <HeroComponentA />
       <Categories categories={categoriesList} landing />
+      <FeatureA />
     </main>
   );
 }

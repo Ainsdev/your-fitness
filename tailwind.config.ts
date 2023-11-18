@@ -1,10 +1,13 @@
 import type { Config } from 'tailwindcss'
-
-const config: Config = {
+import { withUt } from "uploadthing/tw";
+ 
+export default withUt({
+  // Your existing Tailwind config
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    "./src/**/*.{ts,tsx,mdx}"
   ],
   theme: {
     extend: {
@@ -16,5 +19,9 @@ const config: Config = {
     },
   },
   plugins: [],
-}
-export default config
+});
+
+// const config: Config = {
+  
+// }
+// export default config

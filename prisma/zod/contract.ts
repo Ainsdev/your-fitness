@@ -1,5 +1,5 @@
 import * as z from "zod"
-import { CompleteUser, RelatedUserModel, CompleteTrainer, RelatedTrainerModel } from "./index"
+import { CompleteUser, RelatedUserModel } from "./index"
 
 export const ContractModel = z.object({
   id: z.string(),
@@ -8,7 +8,6 @@ export const ContractModel = z.object({
   finishAt: z.date(),
   userId: z.string(),
   trainerId: z.string(),
-  clients: z.number().int(),
   status: z.boolean(),
   canceled: z.boolean(),
   plan: z.string(),
@@ -19,7 +18,7 @@ export const ContractModel = z.object({
 
 export interface CompleteContract extends z.infer<typeof ContractModel> {
   user: CompleteUser
-  trainer: CompleteTrainer
+  trainer: CompleteUser
 }
 
 /**
@@ -29,5 +28,5 @@ export interface CompleteContract extends z.infer<typeof ContractModel> {
  */
 export const RelatedContractModel: z.ZodSchema<CompleteContract> = z.lazy(() => ContractModel.extend({
   user: RelatedUserModel,
-  trainer: RelatedTrainerModel,
+  trainer: RelatedUserModel,
 }))

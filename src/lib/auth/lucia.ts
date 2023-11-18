@@ -16,6 +16,13 @@ export const auth = lucia({
       username: data.username,
       email: data.email,
       name: data.name,
+      rut: data.rut,
+      phone: data.phone,
+      location: data.location,
+      image: data.image,
+      email_notifications: data.email_notifications,
+      trainer_active: data.trainer_active,
+      status: data.status,
     };
   },
 });

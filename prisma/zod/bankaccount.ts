@@ -1,5 +1,5 @@
 import * as z from "zod"
-import { CompleteTrainer, RelatedTrainerModel } from "./index"
+import { CompleteUser, RelatedUserModel } from "./index"
 
 export const BankAccountModel = z.object({
   id: z.string(),
@@ -10,7 +10,7 @@ export const BankAccountModel = z.object({
 })
 
 export interface CompleteBankAccount extends z.infer<typeof BankAccountModel> {
-  trainer: CompleteTrainer
+  trainer: CompleteUser
 }
 
 /**
@@ -19,5 +19,5 @@ export interface CompleteBankAccount extends z.infer<typeof BankAccountModel> {
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
 export const RelatedBankAccountModel: z.ZodSchema<CompleteBankAccount> = z.lazy(() => BankAccountModel.extend({
-  trainer: RelatedTrainerModel,
+  trainer: RelatedUserModel,
 }))

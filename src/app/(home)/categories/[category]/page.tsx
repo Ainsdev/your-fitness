@@ -63,14 +63,18 @@ export default async function CategoryPage({
       <PageHeader
         id="category-page-header"
         aria-labelledby="category-page-header-heading"
+        className="flex flex-col items-start justify-center space-y-4"
       >
+        <Button asChild variant="link" className="text-muted-foreground">
+          <Link href={`/categories`}>Volver</Link>
+        </Button>
         <PageHeaderHeading size="sm">{findCategory.title}</PageHeaderHeading>
         <PageHeaderDescription size="sm">Beneficios</PageHeaderDescription>
         <div className="mt-5 flex h-max w-full overflow-x-scroll border rounded-lg p-5 space-x-2 sm:overflow-x-hidden">
           {findCategory.subcategories.map((subcategory) => (
             <Link
               key={subcategory.slug}
-              href={`/categories/${subcategory.slug}`}
+              href={`/categories/${params.category} /${subcategory.slug}`}
             >
               <Badge>{subcategory.title}</Badge>
             </Link>

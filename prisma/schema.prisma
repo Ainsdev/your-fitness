@@ -53,11 +53,14 @@ model Key {
 // MODELS OF DB
 model User {
   id                   String                 @id @unique
+  status               String                 @default("ACTIVE") // ACTIVE, INACTIVE, BLOCKED
   username             String
   name                 String?
   email                String?                @unique
-  phone                String?
+  phone                Int?
   rut                  String?                @unique
+  image                String?
+  location             String? // Location of the trainer e.g "Las Condes, Santiago, Chile"
   email_notifications  Boolean                @default(true)
   // authentication
   auth_session         Session[]
@@ -67,66 +70,93 @@ model User {
   updatedAt            DateTime               @default(now())
   // teamMembers          TeamMember[]
   // invitations          Invitation[]
+  //
+  //TRAINER
+  //
   trainer_active       Boolean                @default(false)
-  trainer              Trainer[]
-  review               Review[]
-  contract             Contract[]
+  default_plan         String                 @default("BASIC") // BASIC, PREMIUM, ENTERPRISE, ALL -> This is the default plan that the user will have when he create a contract
+  isAvailable          Boolean                @default(true) // If the trainer is aviable to take new students
+  active               Boolean                @default(true) // If the trainer is active or not
+  bank_active          Boolean                @default(false) // If the trainer has linked his bank account
+  trainerPost          TrainerPost[] // This is the post that the trainer can create to promote his services
+  // Site      Site[]
+  // ContractGroup       TrainerGroup[]
+  //
+  // BOTH (TRAINER & USER)
+  //
+  trainer_review       Review[]               @relation("trainer_review")
+  user_review          Review[]               @relation("user_review")
+  trainer_contract     Contract[]             @relation("trainer_contract")
+  user_contract        Contract[]             @relation("user_contract")
+
+  //
+  // Credits & Payments
+  //
   // suscription          Suscription[]
-  // Credits
-  credits              Credit[]
-  creditPurchase       CreditPurchase[]
+  credits        Credit[]
+  creditPurchase CreditPurchase[]
+  trainerPayout  TrainerPayout[] //Trainer
+  bankAccount    BankAccount[] //Trainer
   // add location to user for futures features like: train with other users or create a group
 }
 
-model Trainer {
-  id                  String          @id @default(uuid())
-  userId              String
-  user                User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt           DateTime        @default(now())
-  updatedAt           DateTime        @default(now())
-  plan                String          @default("BASIC") // BASIC, PREMIUM, ENTERPRISE, ALL 
-  isAvailable         Boolean         @default(true) // If the trainer is aviable to take new students
-  active              Boolean         @default(true) // If the trainer is active or not
-  bank_active         Boolean         @default(false) // If the trainer has linked his bank account
-  // Location
-  location            String // Location of the trainer e.g "Las Condes, Santiago, Chile"
-  // Characteristics
-  level               Int             @default(1) // Level of the trainer (Experience)
+model TrainerPost {
+  id                  String   @id @default(uuid())
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @default(now())
+  trainerId           String
+  trainer             User     @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+  // 
+  level               Int      @default(1) // Level of the trainer (Experience)
+  plan                String   @default("BASIC") // BASIC, PREMIUM, ENTERPRISE, ALL 
   specializations     Int // Types of sports that the trainer can teach e.g 1234 = 1: Football, 2: Basketball, 3: Tennis, 4: Volleyball
   sub_specializations Int // Types of sports that the trainer can teach e.g 1234 = 1: Football, 2: Basketball, 3: Tennis, 4: Volleyball
-  methodology         String?         @default("ALL") // Methodology of the trainer e.g ALL, ONLINE, PRESENCIAL, IN GROUP
+  methodology         String?  @default("ALL") // Methodology of the trainer e.g ALL, ONLINE, PRESENCIAL, IN GROUP
   phone               String
   img                 String?
   social_medias       String? // [] of social medias
   //Contract
-  free_days           Int             @default(1) // Number of free sessions that the trainer includes
-  default_days        Int             @default(3) // Number of days that the trainer recommends to train with him per week
-  default_hours       Int             @default(2) // Number of hours that the trainer recommends to train with him per session
+  free_days           Int      @default(1) // Number of free sessions that the trainer includes
+  default_days        Int      @default(3) // Number of days that the trainer recommends to train with him per week
+  default_hours       Int      @default(2) // Number of hours that the trainer recommends to train with him per session
   // discount_at         Int             @default(100) // Minimum number of students to apply a discount
   // discount            Int             @default(0) // Discount that the trainer applies when the number of students is equal or greater than discount_at
   //Texts
   title               String
   bio                 String?
   course_info         String?
-  review              Review[]
-  // Site      Site[]
-  contract            Contract[]
-  trainerPayout       TrainerPayout[]
-  bankAccount         BankAccount[]
-  // ContractGroup       TrainerGroup[]
 
-  @@index([userId])
+  @@index([trainerId])
 }
+
+// model Site {
+//   id           String   @id @default(cuid())
+//   name         String?
+//   description  String?
+//   logo         String?  @default("https://public.blob.vercel-storage.com/eEZHAoPTOBSYGBE3/JRajRyC-PhBHEinQkupt02jqfKacBVHLWJq7Iy.png")
+//   color        String?  @default("")
+//   image        String?  @default("https://public.blob.vercel-storage.com/eEZHAoPTOBSYGBE3/hxfcV5V-eInX3jbVUhjAt1suB7zB88uGd1j20b.png")
+//   subdomain    String?  @unique
+//   customDomain String?  @unique
+//   createdAt    DateTime @default(now())
+//   updatedAt    DateTime @updatedAt
+//   trainer      Trainer  @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+//   trainerId    String
+//   // features     Feature[]
+//   // posts        Post[]
+
+//   @@index([trainerId])
+// }
 
 model Contract {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   finishAt  DateTime // Date when the contract expires, make a function to calculate when is the expiration date
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  trainerId String
-  trainer   Trainer  @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+  userId    String // User that is paying the contract
+  user      User     @relation("user_contract", fields: [userId], references: [id], onDelete: Cascade)
+  trainerId String // Trainer that is receiving the contract
+  trainer   User     @relation("trainer_contract", fields: [trainerId], references: [id], onDelete: Cascade)
   // 
   status    Boolean  @default(true) // If the contract is active live or not
   canceled  Boolean  @default(false) // If the contract get canceled or not (By the user)
@@ -175,8 +205,8 @@ model Review {
   comment   String
   createdAt DateTime @default(now())
 
-  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  trainer Trainer @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+  user    User @relation("user_review", fields: [userId], references: [id], onDelete: Cascade)
+  trainer User @relation("trainer_review", fields: [trainerId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([trainerId])
@@ -228,7 +258,7 @@ model TrainerPayout {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   trainerId String
-  trainer   Trainer  @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+  trainer   User     @relation(fields: [trainerId], references: [id], onDelete: Cascade)
   amount    Float
   status    String   @default("PENDING") // PENDING, PAID, REJECTED
 
@@ -240,30 +270,11 @@ model BankAccount {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   trainerId String
-  trainer   Trainer  @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+  trainer   User     @relation(fields: [trainerId], references: [id], onDelete: Cascade)
   bank      String
 
   @@index([trainerId])
 }
-
-// model Site {
-//   id           String   @id @default(cuid())
-//   name         String?
-//   description  String?
-//   logo         String?  @default("https://public.blob.vercel-storage.com/eEZHAoPTOBSYGBE3/JRajRyC-PhBHEinQkupt02jqfKacBVHLWJq7Iy.png")
-//   color        String?  @default("")
-//   image        String?  @default("https://public.blob.vercel-storage.com/eEZHAoPTOBSYGBE3/hxfcV5V-eInX3jbVUhjAt1suB7zB88uGd1j20b.png")
-//   subdomain    String?  @unique
-//   customDomain String?  @unique
-//   createdAt    DateTime @default(now())
-//   updatedAt    DateTime @updatedAt
-//   trainer      Trainer  @relation(fields: [trainerId], references: [id], onDelete: Cascade)
-//   trainerId    String
-//   // features     Feature[]
-//   // posts        Post[]
-
-//   @@index([trainerId])
-// }
 
 // model Feature {
 //   id        String   @id @default(cuid())

@@ -38,6 +38,18 @@
   transform: rotate(306deg);
 }
 
+.light-4 {
+  background-color: #33ff00a2;
+  filter: blur(97px);
+  flex: none;
+  height: 700px;
+  right: 319px;
+  position: absolute;
+  top: -105px;
+  width: 26px;
+  transform: rotate(106deg);
+}
+
 
 
 @layer base {
