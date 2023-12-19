@@ -34,10 +34,10 @@ export default function HeroComponentA() {
           YourFitness
         </h1>
         <p className="text-lg text-center text-foreground px-2">
-          El 70% abandona antes de lograrlo y el 20% tiene malas prácticas. Se
+          El 70% abandona antes de lograrlo y el 20% lo hace mal. Se
           del 10%, encuentra tu asesor ideal.
         </p>
-      </div>
+      </div>    
       <div className="flex flex-col items-center space-y-4">
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>

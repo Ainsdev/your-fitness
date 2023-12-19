@@ -9,7 +9,7 @@ export const UserModel = z.object({
   email: z.string().nullish(),
   phone: z.number().int().nullish(),
   rut: z.string().nullish(),
-  img: z.string().nullish(),
+  image: z.string().nullish(),
   location: z.string().nullish(),
   email_notifications: z.boolean(),
   createdAt: z.date(),
