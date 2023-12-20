@@ -1,5 +1,5 @@
 import * as z from "zod"
-import { CompleteSession, RelatedSessionModel, CompleteKey, RelatedKeyModel, Completepassword_reset_token, Relatedpassword_reset_tokenModel, CompleteTrainerPost, RelatedTrainerPostModel, CompleteReview, RelatedReviewModel, CompleteContract, RelatedContractModel, CompleteCredit, RelatedCreditModel, CompleteCreditPurchase, RelatedCreditPurchaseModel, CompleteTrainerPayout, RelatedTrainerPayoutModel, CompleteBankAccount, RelatedBankAccountModel } from "./index"
+import { CompleteSession, RelatedSessionModel, CompleteKey, RelatedKeyModel, CompleteVerificationCode, RelatedVerificationCodeModel, CompletePasswordResetToken, RelatedPasswordResetTokenModel, CompleteTrainerPost, RelatedTrainerPostModel, CompleteReview, RelatedReviewModel, CompleteContract, RelatedContractModel, CompleteCredit, RelatedCreditModel, CompleteCreditPurchase, RelatedCreditPurchaseModel, CompleteTrainerPayout, RelatedTrainerPayoutModel, CompleteBankAccount, RelatedBankAccountModel } from "./index"
 
 export const UserModel = z.object({
   id: z.string(),
@@ -7,6 +7,7 @@ export const UserModel = z.object({
   username: z.string(),
   name: z.string().nullish(),
   email: z.string().nullish(),
+  emailVerified: z.date().nullish(),
   phone: z.number().int().nullish(),
   rut: z.string().nullish(),
   image: z.string().nullish(),
@@ -24,7 +25,8 @@ export const UserModel = z.object({
 export interface CompleteUser extends z.infer<typeof UserModel> {
   auth_session: CompleteSession[]
   key: CompleteKey[]
-  password_reset_token: Completepassword_reset_token[]
+  VerificationCode: CompleteVerificationCode[]
+  PasswordResetToken: CompletePasswordResetToken[]
   trainerPost: CompleteTrainerPost[]
   trainer_review: CompleteReview[]
   user_review: CompleteReview[]
@@ -44,7 +46,8 @@ export interface CompleteUser extends z.infer<typeof UserModel> {
 export const RelatedUserModel: z.ZodSchema<CompleteUser> = z.lazy(() => UserModel.extend({
   auth_session: RelatedSessionModel.array(),
   key: RelatedKeyModel.array(),
-  password_reset_token: Relatedpassword_reset_tokenModel.array(),
+  VerificationCode: RelatedVerificationCodeModel.array(),
+  PasswordResetToken: RelatedPasswordResetTokenModel.array(),
   trainerPost: RelatedTrainerPostModel.array(),
   trainer_review: RelatedReviewModel.array(),
   user_review: RelatedReviewModel.array(),

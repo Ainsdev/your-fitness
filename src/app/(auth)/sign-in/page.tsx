@@ -68,7 +68,7 @@ const Page = async () => {
           <div className="text-xs text-muted-foreground">
             <Link
               aria-label="Forgot Password"
-              href="/sign-in"
+              href="/password-reset"
               className=" underline-offset-4 transition-colors hover:underline"
             >
               Te olvidaste la contraseña?

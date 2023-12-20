@@ -22,14 +22,6 @@ model Computer {
   cores Int
 }
 
-model password_reset_token {
-  id      String
-  expires BigInt @id
-  user_id String
-  user    User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
-
-  @@index([user_id])
-}
 
 model Session {
   id             String @id @unique
@@ -50,44 +42,68 @@ model Key {
   @@index([user_id])
 }
 
+model VerificationCode {
+    id      String   @id @unique
+    user_id String
+    code    String
+    expires DateTime
+    user    User     @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+    @@map(name: "verification_code")
+    @@index([user_id])
+}
+
+model PasswordResetToken {
+    id      String @id /// Token to send inside the reset link
+    expires BigInt /// Expiration (in milliseconds) of the token
+    user_id String
+    user    User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+    @@index([expires])
+    @@map("password_reset_tokens")
+    @@index([user_id])
+}
+
 // MODELS OF DB
 model User {
-  id                   String                 @id @unique
-  status               String                 @default("ACTIVE") // ACTIVE, INACTIVE, BLOCKED
-  username             String
-  name                 String?
-  email                String?                @unique
-  phone                Int?
-  rut                  String?                @unique
-  image                String?
-  location             String? // Location of the trainer e.g "Las Condes, Santiago, Chile"
-  email_notifications  Boolean                @default(true)
+  id                  String               @id @unique
+  status              String               @default("ACTIVE") // ACTIVE, INACTIVE, BLOCKED
+  username            String
+  name                String?
+  email               String?              @unique
+  emailVerified       DateTime?
+  phone               Int?
+  rut                 String?              @unique
+  image               String?
+  location            String? // Location of the trainer e.g "Las Condes, Santiago, Chile"
+  email_notifications Boolean              @default(true)
   // authentication
-  auth_session         Session[]
-  key                  Key[]
-  password_reset_token password_reset_token[]
-  createdAt            DateTime               @default(now())
-  updatedAt            DateTime               @default(now())
+  auth_session        Session[]
+  key                 Key[]
+  VerificationCode    VerificationCode[]
+  PasswordResetToken  PasswordResetToken[]
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @default(now())
   // teamMembers          TeamMember[]
   // invitations          Invitation[]
   //
   //TRAINER
   //
-  trainer_active       Boolean                @default(false)
-  default_plan         String                 @default("BASIC") // BASIC, PREMIUM, ENTERPRISE, ALL -> This is the default plan that the user will have when he create a contract
-  isAvailable          Boolean                @default(true) // If the trainer is aviable to take new students
-  active               Boolean                @default(true) // If the trainer is active or not
-  bank_active          Boolean                @default(false) // If the trainer has linked his bank account
-  trainerPost          TrainerPost[] // This is the post that the trainer can create to promote his services
+  trainer_active      Boolean              @default(false)
+  default_plan        String               @default("BASIC") // BASIC, PREMIUM, ENTERPRISE, ALL -> This is the default plan that the user will have when he create a contract
+  isAvailable         Boolean              @default(true) // If the trainer is aviable to take new students
+  active              Boolean              @default(true) // If the trainer is active or not
+  bank_active         Boolean              @default(false) // If the trainer has linked his bank account
+  trainerPost         TrainerPost[] // This is the post that the trainer can create to promote his services
   // Site      Site[]
   // ContractGroup       TrainerGroup[]
   //
   // BOTH (TRAINER & USER)
   //
-  trainer_review       Review[]               @relation("trainer_review")
-  user_review          Review[]               @relation("user_review")
-  trainer_contract     Contract[]             @relation("trainer_contract")
-  user_contract        Contract[]             @relation("user_contract")
+  trainer_review      Review[]             @relation("trainer_review")
+  user_review         Review[]             @relation("user_review")
+  trainer_contract    Contract[]           @relation("trainer_contract")
+  user_contract       Contract[]           @relation("user_contract")
 
   //
   // Credits & Payments
