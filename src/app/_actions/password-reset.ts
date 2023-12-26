@@ -1,4 +1,5 @@
 "use server";
+
 import { generatePasswordResetToken } from "@/lib/auth/token";
 import { db } from "@/lib/db";
 
@@ -14,21 +15,25 @@ export const doPasswordReset = async (email: string) => {
     });
 
     if (!user) {
+      console.log("No user found");
       return delay();
     }
 
     const token = await generatePasswordResetToken(user.id);
-    await fetch("/api/password-reset", {
+    await fetch("http://localhost:3000/api/password-reset", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
-        email,
         token,
+        email,
       }),
-    });
+    }).catch((e) => console.log("Error sending email", e));
 
     return delay();
   } catch (e) {
     console.log(e);
-    throw new InternalServerError("Something went wrong");
+    throw new InternalServerError("Contactate con soporte o intenta más tarde");
   }
 };

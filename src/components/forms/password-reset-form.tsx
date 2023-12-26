@@ -19,7 +19,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { doPasswordReset } from "./actions";
+import { doPasswordReset } from "../../app/_actions/password-reset";
 import { Loader } from "lucide-react";
 
 const schema = z.object({
@@ -43,7 +43,7 @@ export const PasswordResetForm = () => {
     setIsSubmitting(true);
     try {
       await doPasswordReset(values.email);
-      router.push("/auth/password-reset/success");
+      router.push("/password-reset/success");
     } catch (error) {
       if (isAppError(error)) {
         return toast({

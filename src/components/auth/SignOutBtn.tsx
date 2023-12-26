@@ -18,7 +18,7 @@ export default function SignOutBtn() {
   };
   return (
     <button onClick={handleSignOut} className="w-full text-left">
-      Sign out
+      Cerrar Sesión
     </button>
   );
 }

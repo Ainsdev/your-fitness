@@ -7,7 +7,11 @@ import { prisma } from "@lucia-auth/adapter-prisma";
 import { db } from "@/lib/db/index";
 
 export const auth = lucia({
-  adapter: prisma(db),
+  adapter: prisma(db, {
+    user: "user",
+    key: "key",
+    session: "session",
+  }),
   env: "DEV",
   middleware: nextjs_future(),
   sessionCookie: { expires: false },

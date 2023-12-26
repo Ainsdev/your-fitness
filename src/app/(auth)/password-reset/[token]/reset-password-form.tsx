@@ -51,7 +51,7 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = (props) => {
         description: "Su contraseña ha sido cambiada exitosamente.",
       });
       router.push('/sign-in');
-    } catch (e) {
+    } catch (e: any) {
       if (isAppError(e)) {
         return toast({
           title: "Error",
@@ -59,11 +59,10 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = (props) => {
           description: e.message,
         });
       }
-
       toast({
         title: "Error",
         variant: "destructive",
-        description: "Tu con",
+        description: e.message,
       });
     } finally {
       setIsSubmitting(false);
@@ -89,7 +88,7 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = (props) => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full" isLoading={isSubmitting}>
+        <Button type="submit" className="w-full">
           Reset Password
         </Button>
       </form>

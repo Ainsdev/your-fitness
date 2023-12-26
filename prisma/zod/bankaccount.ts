@@ -6,7 +6,11 @@ export const BankAccountModel = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
   trainerId: z.string(),
-  bank: z.string(),
+  accountbank_name: z.string(),
+  accountbank_sbif: z.string(),
+  accountbank_type: z.string(),
+  accountbank_num: z.string(),
+  accountbank_personal_id: z.string(),
 })
 
 export interface CompleteBankAccount extends z.infer<typeof BankAccountModel> {

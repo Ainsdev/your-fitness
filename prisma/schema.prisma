@@ -22,7 +22,6 @@ model Computer {
   cores Int
 }
 
-
 model Session {
   id             String @id @unique
   user_id        String
@@ -43,25 +42,25 @@ model Key {
 }
 
 model VerificationCode {
-    id      String   @id @unique
-    user_id String
-    code    String
-    expires DateTime
-    user    User     @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  id      String   @id @unique
+  user_id String
+  code    String
+  expires DateTime
+  user    User     @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
-    @@map(name: "verification_code")
-    @@index([user_id])
+  @@index([user_id])
+  @@map(name: "verification_code")
 }
 
 model PasswordResetToken {
-    id      String @id /// Token to send inside the reset link
-    expires BigInt /// Expiration (in milliseconds) of the token
-    user_id String
-    user    User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  id      String @id /// Token to send inside the reset link
+  expires BigInt /// Expiration (in milliseconds) of the token
+  user_id String
+  user    User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
-    @@index([expires])
-    @@map("password_reset_tokens")
-    @@index([user_id])
+  @@index([expires])
+  @@index([user_id])
+  @@map("password_reset_tokens")
 }
 
 // MODELS OF DB
@@ -72,7 +71,7 @@ model User {
   name                String?
   email               String?              @unique
   emailVerified       DateTime?
-  phone               Int?
+  phone               String?
   rut                 String?              @unique
   image               String?
   location            String? // Location of the trainer e.g "Las Condes, Santiago, Chile"
@@ -90,9 +89,7 @@ model User {
   //TRAINER
   //
   trainer_active      Boolean              @default(false)
-  default_plan        String               @default("BASIC") // BASIC, PREMIUM, ENTERPRISE, ALL -> This is the default plan that the user will have when he create a contract
   isAvailable         Boolean              @default(true) // If the trainer is aviable to take new students
-  active              Boolean              @default(true) // If the trainer is active or not
   bank_active         Boolean              @default(false) // If the trainer has linked his bank account
   trainerPost         TrainerPost[] // This is the post that the trainer can create to promote his services
   // Site      Site[]
@@ -282,12 +279,16 @@ model TrainerPayout {
 }
 
 model BankAccount {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-  trainerId String
-  trainer   User     @relation(fields: [trainerId], references: [id], onDelete: Cascade)
-  bank      String
+  id                      String   @id @default(uuid())
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @default(now())
+  trainerId               String
+  trainer                 User     @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+  accountbank_name        String
+  accountbank_sbif        String
+  accountbank_type        String
+  accountbank_num         String
+  accountbank_personal_id String
 
   @@index([trainerId])
 }

@@ -9,7 +9,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { UploadButton } from "@/lib/uploadthing";
+import PointsCard from "../cards/points-card";
+import QuickActions from "../cards/quickactions-card";
 
 export default function UserSettings({
   session,
@@ -17,29 +18,23 @@ export default function UserSettings({
   session: AuthSession["session"] | null;
 }) {
   return (
-    <div className="flex-col gap-4">
-      <div className="flex flex-col sm:flex-row gap-4">
-        <Avatar>
-          <AvatarImage src={session?.user.image} />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
-        <UploadButton
-          endpoint="imageUploader"
-          onClientUploadComplete={(res) => {
-            // Do something with the response
-            console.log("Files: ", res);
-            alert("Upload Completed");
-          }}
-          onUploadError={(error: Error) => {
-            // Do something with the error.
-            alert(`ERROR! ${error.message}`);
-          }}
-        />
-      </div>
+    <div className="flex-col gap-4 justify-center items-center">
+      <PointsCard
+        plan="Plan 1"
+        planRenewal="12/12/2023"
+        planStatus={true}
+        points="100"
+      />
       <Accordion type="single" collapsible>
         <AccordionItem value="item-1">
-          <AccordionTrigger>Info Personal</AccordionTrigger>
+          <AccordionTrigger>Informacion Personal</AccordionTrigger>
           <AccordionContent>
+            {/* <div className="flex flex-col sm:flex-row gap-4 my-4">
+              <Avatar>
+                <AvatarImage src={session?.user.image} />
+                <AvatarFallback>img</AvatarFallback>
+              </Avatar>
+            </div> */}
             <UpdateInfoCard
               email={session?.user.email ?? ""}
               name={session?.user.name ?? ""}
@@ -48,7 +43,14 @@ export default function UserSettings({
             />
           </AccordionContent>
         </AccordionItem>
+        <AccordionItem value="item-2">
+          <AccordionTrigger>Historial Pagos</AccordionTrigger>
+          <AccordionContent>
+            <p>Informacion de Pago</p>
+          </AccordionContent>
+        </AccordionItem>
       </Accordion>
+      {/* <QuickActions /> */}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import { ResetPasswordForm } from "./reset-password-form";
 
@@ -21,14 +21,6 @@ export default function Page({ params }: Props) {
           </p>
         </div>
         <ResetPasswordForm token={params.token} />
-        <Link
-          href="/auth/login"
-          className={buttonVariants({
-            variant: "outline",
-          })}
-        >
-          Iniciar sesión
-        </Link>
       </div>
     </div>
   );

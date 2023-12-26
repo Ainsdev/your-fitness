@@ -14,14 +14,11 @@ export default function Page() {
           </p>
           <p className="text-sm text-muted-foreground">
             No recibiste el email?{" "}
-            <Link href="/auth/password-reset" className="font-semibold">
+            <Link href="/auth/password-reset" className="font-semibold underline">
               Intentalo de nuevo
             </Link>
           </p>
         </div>
-        <Link href="/auth/login" className={buttonVariants()}>
-          Go back to login
-        </Link>
       </div>
     </div>
   );

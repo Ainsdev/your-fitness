@@ -1,4 +1,4 @@
-import { Link } from "lucide-react";
+import Link from "next/link";
 import SignOutBtn from "./auth/SignOutBtn";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import {
@@ -9,6 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+
 
 function AvatarMenu(props: any) {
   return (
@@ -32,11 +33,13 @@ function AvatarMenu(props: any) {
           </span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <Link href="/account">
-          <DropdownMenuItem className="cursor-pointer">
-            Account
-          </DropdownMenuItem>
-        </Link>
+        <DropdownMenuItem className="cursor-pointer">
+          <Link href="/dashboard/account">Mi Cuenta</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer">
+          <Link href="/dashboard/account">Trainer</Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
         <DropdownMenuItem>
           <SignOutBtn />
         </DropdownMenuItem>

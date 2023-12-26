@@ -7,13 +7,11 @@ interface EmailTemplateProps {
 export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
   token,
 }) => (
-  <div className="flex flex-col justify-center items-center">
-    <h1>Restablecer contraseña</h1>
-    <p>
-      Para restablecer tu contraseña, haz clic en el siguiente enlace y sigue
-      las instrucciones.
-    </p>
-    <a>{`${process.env.DOMAIN}/password-reset/${token}`}</a>
+  <div>
+    <h1>
+      Tu token es,{" "}
+      <a href={`${process.env.DOMAIN}/password-reset/${token}`}>LINK</a>
+    </h1>
   </div>
 );
 
