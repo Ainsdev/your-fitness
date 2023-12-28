@@ -13,16 +13,19 @@ type FormValue = z.infer<typeof trainerForm>;
 export const doTrainerForm = async (schema: FormValue) => {
   const session = await getPageSession();
   try {
-    if (!session || !session.user.trainer_active === true) {
+    if (!session || session.user.trainer_active) {
+      console.log("SEsion invalida");
       throw new InternalServerError("No se pudo crear el formulario");
     }
-    db.user.update({
+    console.log("SessionID", session.user.userId);
+    await db.user.update({
       where: {
         id: session.user.userId,
       },
       data: {
         trainer_active: true,
-        username: schema.name,
+        bank_active: true,
+        username: schema.name,  
         name: schema.bank.accountbank_name,
         phone: schema.phone,
         rut: schema.rut,
@@ -36,12 +39,17 @@ export const doTrainerForm = async (schema: FormValue) => {
             accountbank_personal_id: schema.rut,
           },
         },
+        credits: {
+          create: {
+            credits: 0,
+          },
+        },
       },
     });
-
+    console.log("Se creo el formulario");
     return delay();
   } catch (e) {
-    console.log(e);
+    console.log("ERROR TPYE:",e);
     throw new InternalServerError(
       "Algo Salio mal, revisa los datos ingresados"
     );

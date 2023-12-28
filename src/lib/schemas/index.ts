@@ -3,7 +3,6 @@ import { z } from "zod";
 
 
 export const trainerForm = z.object({
-    email: z.string().email(),
     name: z.string().min(4, { message: "El nombre es muy corto" }),
     phone: z.string().min(9, { message: "El telefono no es valido }" }),
     rut: z.string().refine((value) => validateRut(cleanRut(value)), {

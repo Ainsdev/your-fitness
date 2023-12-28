@@ -40,7 +40,9 @@ import {
 } from "../ui/select";
 import { accountbank_sbif_third, type_accounts } from "@/config/payments";
 import { trainerForm } from "@/lib/schemas";
-import { doTrainerForm } from "@/app/_actions/trainer-form";
+import { doTrainerForm } from "@/app/_actions/trainer";
+import { Label } from "../ui/label";
+import router from "next/router";
 
 type NewTrainerInfo = {
   email: string | undefined;
@@ -56,7 +58,6 @@ export const NewTrainerForm = (props: NewTrainerInfo) => {
   const form = useForm<FormValue>({
     resolver: zodResolver(trainerForm),
     defaultValues: {
-      email: props.email,
       location: location,
     },
   });
@@ -64,17 +65,13 @@ export const NewTrainerForm = (props: NewTrainerInfo) => {
   const onSubmit = async (values: FormValue) => {
     setIsSubmitting(true);
     try {
-      await doTrainerForm(values)
+      await doTrainerForm(values);
       toast({
-        title: "You submitted the following values:",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">
-              {JSON.stringify(values, null, 2)}
-            </code>
-          </pre>
-        ),
+        title: "Excelente!! Te has convertido en Trainer",
+        description:
+          "Ahora crea tu primer entrenamiento y comienza a ganar dinero",
       });
+      router.push("/dashboard/trainer");
     } catch (error) {
       if (isAppError(error)) {
         return toast({
@@ -86,7 +83,7 @@ export const NewTrainerForm = (props: NewTrainerInfo) => {
 
       toast({
         title: "Error",
-        description: "Something went wrong. Please try again.",
+        description: "Algo salio mal, intenta nuevamente",
         variant: "destructive",
       });
     } finally {
@@ -100,31 +97,21 @@ export const NewTrainerForm = (props: NewTrainerInfo) => {
         className="flex flex-col justify-center items-center w-full p-1 z-40"
         onSubmit={form.handleSubmit(onSubmit)}
       >
+        
         <Carousel className="w-full max-w-xl flex flex-col gap-6 py-6 ">
           <CarouselContent className="p-1">
             <CarouselItem key={1}>
               <div className="flex flex-col gap-4">
-                <FormField
-                  control={form.control}
-                  name="email"
-                  defaultValue={props.email}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          type="email"
-                          placeholder="your@fitness.com"
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        Tu email no puede ser modificado.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className="flex flex-col gap-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    disabled
+                    type="email"
+                    placeholder="your@fitness.com"
+                    value={props.email}
+                  />
+                  <p className="text-sm text-muted-foreground">Tu email no puede ser cambiado</p>
+                </div>
                 <FormField
                   control={form.control}
                   name="name"
@@ -314,15 +301,14 @@ export const NewTrainerForm = (props: NewTrainerInfo) => {
                   </FormItem>
                 )}
               />
-              <div className="p-4">
-                <Button
-                  className="w-max z-50 drop-shadow-[0_20px_50px_rgba(6,_260,_81,_0.07)] hover:drop-shadow-[0_20px_45px_rgba(6,_260,_81,_0.1)]"
-                  type="submit"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? <Loader /> : "Convertirme en Trainer"}
-                </Button>
-              </div>
+
+              <Button
+                className="m-4 w-max z-50 drop-shadow-[0_20px_50px_rgba(6,_260,_81,_0.07)] hover:drop-shadow-[0_20px_45px_rgba(6,_260,_81,_0.1)]"
+                type="submit"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? <Loader /> : "Convertirme en Trainer"}
+              </Button>
             </CarouselItem>
           </CarouselContent>
           <div className="flex relative">

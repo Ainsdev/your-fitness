@@ -34,10 +34,10 @@ export const POST = async (request: NextRequest) => {
       }
     );
   }
-  try {
+  try { 
     const user = await auth.createUser({
       key: {
-        providerId: "username", // auth method
+        providerId: "email", // auth method
         providerUserId: email.toLowerCase(), // unique id when using "username" auth method
         password, // hashed by Lucia
       },

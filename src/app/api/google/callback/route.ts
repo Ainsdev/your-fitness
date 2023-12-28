@@ -28,7 +28,6 @@ export const GET = async (request: NextRequest) => {
         attributes: {
           username: googleUser.name,
           email: googleUser.email as string,
-          name: googleUser.name,
         },
       });
       return user;

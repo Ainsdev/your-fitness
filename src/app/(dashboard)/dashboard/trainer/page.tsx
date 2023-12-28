@@ -21,6 +21,7 @@ import { NewTrainerForm } from "@/components/forms/trainer-form";
 
 export default async function TrainerPage() {
   const session = await getPageSession();
+  
   return (
     <>
       {session?.user.trainer_active ? (
@@ -68,6 +69,7 @@ export default async function TrainerPage() {
           </Drawer>
         </div>
       )}
+      
     </>
   );
 }

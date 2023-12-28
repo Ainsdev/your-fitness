@@ -37,7 +37,7 @@ function AvatarMenu(props: any) {
           <Link href="/dashboard/account">Mi Cuenta</Link>
         </DropdownMenuItem>
         <DropdownMenuItem className="cursor-pointer">
-          <Link href="/dashboard/account">Trainer</Link>
+          <Link href="/dashboard/trainer">Trainer</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
