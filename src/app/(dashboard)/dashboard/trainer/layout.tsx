@@ -13,9 +13,13 @@ import { getPageSession } from "@/lib/auth/lucia";
 export default async function StoreLayout({
   children,
   clients,
+  credits,
+  analytics,
 }: {
   children: React.ReactNode;
   clients: React.ReactNode;
+  credits: React.ReactNode;
+  analytics: React.ReactNode;
 }) {
   //   const user = await currentUser()
 
@@ -23,36 +27,7 @@ export default async function StoreLayout({
   //     redirect("/signin")
   //   }
 
-  //   const allStores = await db
-  //     .select({
-  //       id: stores.id,
-  //       name: stores.name,
-  //     })
-  //     .from(stores)
-  //     .where(eq(stores.userId, user.id))
-
-  //   const store = allStores.find((store) => store.id === storeId)
-
-  //   if (!store) {
-  //     notFound()
-  //   }
-
-  //   const subscriptionPlan = await getSubscriptionPlanAction(user.id)
-  //   const allStores = [
-  //     {
-  //       id: 1,
-  //       name: "Store 1",
-  //     },
-  //     {
-  //       id: 2,
-  //       name: "Store 2",
-  //     },
-  //     {
-  //       id: 3,
-  //       name: "Store 3",
-  //     },
-  //   ];
-  //   const store = allStores.find((store) => store.id === storeId);
+  
   const session = await getPageSession();
   return (
     <Shell variant="sidebar">
@@ -63,19 +38,13 @@ export default async function StoreLayout({
             Administra tu perfil
           </PageHeaderDescription>
         </PageHeader>
-        {/* {store && allStores.length > 1 ? (
-          <PagerSwitcher
-            className="sm:w-1/3"
-            current={store}
-            list={allStores}
-            dashboardRedirectPath={"/dashboard/category/"}
-          />
-        ) : null} */}
       </div>
       <div className="flex flex-col space-y-8 overflow-auto justify-center items-center">
         {session?.user.trainer_active ? <TrainerTabs /> : null}
+        {session?.user.trainer_active ? clients : null}
+        {/* {session?.user.trainer_active ?? credits} */}
         {children}
-        {session?.user.trainer_active ?? clients}
+        {/* {session?.user.trainer_active ?? analytics} */}
       </div>
     </Shell>
   );

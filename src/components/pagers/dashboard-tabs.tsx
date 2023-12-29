@@ -22,12 +22,12 @@ export function TrainerTabs() {
       isActive: segment === "clients",
     },
     {
-      title: "Ordenes",
+      title: "Retiros",
       href: `/dashboard/trainer/payouts`,
       isActive: segment === "payouts",
     },
     {
-      title: "Mi Perfil",
+      title: "Mis Posts",
       href: `/dashboard/trainer/profile`,
       isActive: segment === "profile",
     },

@@ -32,10 +32,10 @@ export default async function TrainerPage() {
           >
             <CardHeader className="space-y-1">
               <CardTitle className="line-clamp-1 text-2xl">
-                Conecta con Payku
+                Crea tu publicacion
               </CardTitle>
               <CardDescription>
-                Conectate con tu cuenta bancaria y empieza a recibir pagos!!
+                Conectate con tu gente 
               </CardDescription>
             </CardHeader>
             <CardContent>

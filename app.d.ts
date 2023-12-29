@@ -9,6 +9,7 @@ declare namespace Lucia {
     rut?: string;
     phone?: string;
     image?: string;
+    location?: string;
     email_notifications?: boolean;
     trainer_active?: boolean;
     status?: string;

@@ -6,10 +6,10 @@ export type AuthSession = {
     user: {
       id: string;
       username: string;
-      name: string;
+      name?: string;
       email: string;
       rut?: string;
-      phone?: number;
+      phone?: string;
       location?: string;
       image?: string;
       email_notifications?: boolean;
