@@ -36,7 +36,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background to-background/60 md:to-foreground/30 dark:md:to-background/40" />
       </AspectRatio>
-      <main className="container absolute top-1/4 col-span-1 flex items-center md:static md:top-0 md:col-span-2 md:flex md:translate-y-0 lg:col-span-1">
+      <main className="container absolute top-12 col-span-1 flex items-center md:static md:top-0 md:col-span-2 md:flex md:translate-y-0 lg:col-span-1">
         <div
         className="pattern-dots absolute top-0 -z-10 h-full w-full pattern-bg-transparent 
     pattern-orange-500 pattern-opacity-20 pattern-size-4 dark:pattern-white dark:pattern-opacity-10 dark:pattern-size-4"

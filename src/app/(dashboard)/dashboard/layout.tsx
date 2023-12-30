@@ -11,8 +11,8 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getPageSession();
-  if (!session) redirect("/sign-in");
+  // const session = await getPageSession();
+  // if (!session) redirect("/sign-in");
   // console.log(session)
   return (
     <div key="1" className="flex flex-col w-full min-h-screen ">

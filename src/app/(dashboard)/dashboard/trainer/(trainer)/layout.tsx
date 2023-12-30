@@ -8,6 +8,11 @@ import {
 } from "@/components/page-header";
 import { TrainerTabs } from "@/components/pagers/dashboard-tabs";
 import { getPageSession } from "@/lib/auth/lucia";
+import {
+  ResizablePanelGroup,
+  ResizablePanel,
+  ResizableHandle,
+} from "@/components/ui/resizable";
 // import { PagerSwitcher } from "@/components/pagers/switcher";
 
 export default async function StoreLayout({
@@ -27,7 +32,6 @@ export default async function StoreLayout({
   //     redirect("/signin")
   //   }
 
-  
   const session = await getPageSession();
   return (
     <Shell variant="sidebar">
@@ -41,10 +45,14 @@ export default async function StoreLayout({
       </div>
       <div className="flex flex-col space-y-8 overflow-auto justify-center items-center">
         {session?.user.trainer_active ? <TrainerTabs /> : null}
+        <div className="flex justify-evenly items-center sm:items-start flex-col md:flex-row w-full">
         {session?.user.trainer_active ? clients : null}
-        {/* {session?.user.trainer_active ?? credits} */}
+        {session?.user.trainer_active ? credits : null}
+        {/* {clients}
+        {credits} */}
+        </div>
         {children}
-        {/* {session?.user.trainer_active ?? analytics} */}
+        {session?.user.trainer_active ? analytics : null}
       </div>
     </Shell>
   );

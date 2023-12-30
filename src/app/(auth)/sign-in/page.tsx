@@ -24,7 +24,7 @@ const Page = async () => {
 
   return (
     <Shell variant="centered" className="p-0">
-      <Card className="w-full drop-shadow-[0_20px_50px_rgba(266,_120,_81,_0.1)] transition-all duration-150 hover:drop-shadow-[0_20px_50px_rgba(266,_120,_81,_0.25)]">
+      <Card className="w-full  backdrop-blur-sm bg-card/30 drop-shadow-[0_20px_50px_rgba(12,_240,_11,_0.1)] transition-all duration-150 hover:drop-shadow-[0_20px_50px_rgba(12,_240,_11,_0.25)]">
         <CardHeader>
           <CardTitle>Inicia Sesion</CardTitle>
           <CardDescription>
@@ -34,7 +34,7 @@ const Page = async () => {
         <CardContent className="flex flex-col items-center justify-center">
           <div className="flex items-center justify-center gap-4">
             <Button size="sm" asChild variant="secondary">
-              <Link href='/api/google'>
+              <Link href="/api/google">
                 <LogIn className="mr-2 h-4 w-4" aria-hidden="true" />
                 Google
               </Link>

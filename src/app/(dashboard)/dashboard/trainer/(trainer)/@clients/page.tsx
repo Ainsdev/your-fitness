@@ -17,6 +17,7 @@ import {
   TableCell,
   Table,
 } from "@/components/ui/table";
+import { CopyIcon } from "@radix-ui/react-icons";
 import React from "react";
 
 export default function ClientsPage() {
@@ -25,10 +26,12 @@ export default function ClientsPage() {
   const handleTabChange = () => {
     setTomorrow(!tomorrow);
   };
+  // const copylink = ({ e, copy }: { e: React.MouseEvent; copy: string }) =>
+  //   navigator.clipboard.writeText(copy);
 
   return (
-    <section>
-      <Card>
+    <section className="px-8 flex justify-center items-center overflow-hidden w-screen md:overflow-visible md:w-max md:overflow-x-hidden">
+      <Card className="flex flex-col overflow-x-scroll justify-center items-start w-max md:w-[50vw] md:overflow-x-hidden">
         <CardHeader>
           <CardTitle className="text-sm font-semibold">
             Proximas sesiones
@@ -52,46 +55,61 @@ export default function ClientsPage() {
             </Button>
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="w-full">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[100px]">Numero</TableHead>
+                <TableHead className="w-[100px]">Hora</TableHead>
                 <TableHead>Nombre</TableHead>
-                <TableHead>Hora</TableHead>
+                <TableHead>Numero</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               <TableRow>
-                <TableCell className="font-medium">+56982196730</TableCell>
+                <TableCell className="font-medium ">9:50</TableCell>
                 <TableCell>Lucas Dalto</TableCell>
                 <TableCell>
-                  <Badge color="green">9:50</Badge>
+                  <a href="tel:56986627555">
+                    <Badge variant="secondary">
+                      <CopyIcon className="mx-1" />
+                      +56986627555
+                    </Badge>
+                  </a>
                 </TableCell>
                 <TableCell className="text-right">
                   <Button size="sm" variant="outline">
                     Posponer
                   </Button>
                 </TableCell>
-              </TableRow>
+              </TableRow>{" "}
               <TableRow>
-                <TableCell className="font-medium">+56982196730</TableCell>
+                <TableCell className="font-medium">9:50</TableCell>
                 <TableCell>Lucas Dalto</TableCell>
                 <TableCell>
-                  <Badge color="green">9:50</Badge>
+                  <a href="tel:56986627555">
+                    <Badge variant="secondary">
+                      <CopyIcon className="mx-1" />
+                      +56986627555
+                    </Badge>
+                  </a>
                 </TableCell>
                 <TableCell className="text-right">
                   <Button size="sm" variant="outline">
                     Posponer
                   </Button>
                 </TableCell>
-              </TableRow>
+              </TableRow>{" "}
               <TableRow>
-                <TableCell className="font-medium">+56982196730</TableCell>
+                <TableCell className="font-medium">9:50</TableCell>
                 <TableCell>Lucas Dalto</TableCell>
                 <TableCell>
-                  <Badge color="green">9:50</Badge>
+                  <a href="tel:56986627555">
+                    <Badge variant="secondary">
+                      <CopyIcon className="mx-1" />
+                      +56986627555
+                    </Badge>
+                  </a>
                 </TableCell>
                 <TableCell className="text-right">
                   <Button size="sm" variant="outline">

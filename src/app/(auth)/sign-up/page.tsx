@@ -23,7 +23,7 @@ const Page = async () => {
 
   return (
     <Shell variant="centered" className="p-0">
-      <Card className="w-full drop-shadow-[0_20px_50px_rgba(266,_120,_81,_0.1)] transition-all duration-150 hover:drop-shadow-[0_20px_50px_rgba(266,_120,_81,_0.25)]">
+      <Card className="w-full  backdrop-blur-sm bg-card/30 drop-shadow-[0_20px_50px_rgba(12,_240,_11,_0.1)] transition-all duration-150 hover:drop-shadow-[0_20px_50px_rgba(12,_240,_11,_0.25)]">
         <CardHeader>
           <CardTitle>Crear cuenta</CardTitle>
           <CardDescription>
