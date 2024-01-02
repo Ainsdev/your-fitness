@@ -1,3 +1,4 @@
+'use server'
 import { revalidatePath } from "next/cache";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { db } from "@/lib/db";
