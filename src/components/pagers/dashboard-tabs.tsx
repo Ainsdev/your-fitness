@@ -27,7 +27,7 @@ export function TrainerTabs() {
       isActive: segment === "payouts",
     },
     {
-      title: "Mis Posts",
+      title: "Mis Planes",
       href: `/dashboard/trainer/profile`,
       isActive: segment === "profile",
     },

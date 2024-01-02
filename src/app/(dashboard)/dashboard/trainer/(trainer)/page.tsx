@@ -18,30 +18,63 @@ import {
 } from "@/components/ui/card";
 import { getPageSession } from "@/lib/auth/lucia";
 import { NewTrainerForm } from "@/components/forms/trainer-form";
+import { CommandShortcut } from "@/components/ui/command";
+import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 export default async function TrainerPage() {
   const session = await getPageSession();
-  
+
   return (
     <>
       {session?.user.trainer_active ? (
-        <div className="space-y-6">
-          <Card
-            id="connect-to-stripe"
-            aria-labelledby="connect-to-stripe-heading"
-          >
-            <CardHeader className="space-y-1">
-              <CardTitle className="line-clamp-1 text-2xl">
-                Crea tu publicacion
-              </CardTitle>
+        <div className="space-y-6 w-full py-12">
+          <Card className="w-full bg-card/10">
+            <CardHeader>
+              <CardTitle>Miembros</CardTitle>
               <CardDescription>
-                Conectate con tu gente 
+                Proximamente podras colaborar con otros trainers.
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <Button className="drop-shadow-[0_20px_50px_rgba(266,_120,_81,_0.1)] hover:drop-shadow-[0_20px_15px_rgba(6,_260,_81,_0.2)]">
-                Conectar a Payku
-              </Button>
+            <CardContent className="space-y-4">
+              <div className="flex items-center gap-2">
+                <Avatar>
+                  <AvatarImage
+                    alt="Avatar"
+                    src="https://images.unsplash.com/photo-1606902965551-dce093cda6e7?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8dHJhaW5lcnxlbnwwfHwwfHx8MA%3D%3D"
+                  />
+                </Avatar>
+                <div className="space-y-1">
+                  <h3 className="text-lg font-semibold">{
+                    session?.user.username
+                  }</h3>
+                  <Badge>Trainer Member</Badge>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <h4 className="text-md font-medium">Acciones rapidas</h4>
+                <div className="grid gap-2">
+                  <Link className="flex items-center gap-2" href="#">
+                    <Button size="sm" variant="outline">
+                      Crear Nuevo Plan
+                    </Button>
+                    <CommandShortcut>Ctrl + E</CommandShortcut>
+                  </Link>
+                  <Link className="flex items-center gap-2" href="#">
+                    <Button size="sm" variant="outline">
+                      Configurar Planes
+                    </Button>
+                    <CommandShortcut>Ctrl + P</CommandShortcut>
+                  </Link>
+                  <Link className="flex items-center gap-2" href="#">
+                    <Button size="sm" variant="outline">
+                      Cambiar Numero
+                    </Button>
+                    <CommandShortcut>Ctrl + S</CommandShortcut>
+                  </Link>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -52,14 +85,18 @@ export default async function TrainerPage() {
           </h1>
           <Drawer>
             <DrawerTrigger asChild>
-              <Button >Activar Cuenta como Trainer</Button>
+              <Button>Activar Cuenta como Trainer</Button>
             </DrawerTrigger>
             <DrawerContent className="flex justify-center items-center ">
               <DrawerHeader>
                 <DrawerTitle>Conviertete en Trainer</DrawerTitle>
                 <DrawerDescription>Hazlo Rapido y sencillo</DrawerDescription>
               </DrawerHeader>
-              <NewTrainerForm email={session?.user.email} name={""} phone={""} />
+              <NewTrainerForm
+                email={session?.user.email}
+                name={""}
+                phone={""}
+              />
               <DrawerFooter className="flex justify-center items-center">
                 <DrawerClose>
                   <Button variant="outline">Cancelar</Button>
@@ -69,7 +106,6 @@ export default async function TrainerPage() {
           </Drawer>
         </div>
       )}
-      
     </>
   );
 }

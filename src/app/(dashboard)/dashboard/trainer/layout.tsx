@@ -17,12 +17,12 @@ import {
 
 export default async function StoreLayout({
   children,
-  clients,
+  proxclients,
   credits,
   analytics,
 }: {
   children: React.ReactNode;
-  clients: React.ReactNode;
+  proxclients: React.ReactNode;
   credits: React.ReactNode;
   analytics: React.ReactNode;
 }) {
@@ -34,14 +34,19 @@ export default async function StoreLayout({
 
   const session = await getPageSession();
   return (
-      <>
-        <div className="flex justify-evenly items-center sm:items-start flex-col md:flex-row w-full">
-        {session?.user.trainer_active ? clients : null}
-        {session?.user.trainer_active ? analytics : null}
-        </div>
-        {session?.user.trainer_active ? credits : null}
+    <Shell variant="sidebar">
+      <div className="xxs:flex-row flex flex-col gap-4 pr-1">
+        <PageHeader className="flex-1">
+          <PageHeaderHeading size="sm">Trainer Dashboard</PageHeaderHeading>
+          <PageHeaderDescription size="sm">
+            Administra tu perfil
+          </PageHeaderDescription>
+        </PageHeader>
+      </div>
+      <div className="flex flex-col space-y-8 overflow-auto justify-center items-center">
+        {session?.user.trainer_active ? <TrainerTabs /> : null}
         {children}
-      </>
-  
+      </div>
+    </Shell>
   );
 }
