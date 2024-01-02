@@ -40,7 +40,6 @@ export const googleAuth = google(auth, {
 export type Auth = typeof auth;
 
 export const getPageSession = cache(() => {
-  if (!context) return null;
   const authRequest = auth.handleRequest("GET", context);
   return authRequest.validate();
 });
