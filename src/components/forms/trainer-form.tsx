@@ -16,12 +16,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { toast } from "@/components/ui/use-toast";
 import { isAppError } from "@/lib/error-code";
-import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { doPasswordReset } from "../../app/_actions/password-reset";
-import { Link, Loader } from "lucide-react";
+
+import { Loader } from "lucide-react";
 import LocationInput from "../location-popover";
 
 import {
@@ -43,6 +42,8 @@ import { trainerForm } from "@/lib/schemas";
 import { doTrainerForm } from "@/app/_actions/trainer";
 import { Label } from "../ui/label";
 import router from "next/router";
+
+
 
 type NewTrainerInfo = {
   email: string | undefined;

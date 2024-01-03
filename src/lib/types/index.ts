@@ -91,3 +91,11 @@ export interface DataTableFilterableColumn<TData>
 export interface StatusPayments {
   status : "PENDING" | "PAID" | "FAILED" | "REJECTED"
 }
+
+export type BankAccount = {
+  accountbank_name: string;
+  accountbank_personal_id: string;
+  accountbank_sbif: string;
+  accountbank_type: string;
+  accountbank_num: string;
+};

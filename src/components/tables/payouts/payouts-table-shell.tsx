@@ -140,6 +140,10 @@ export function PayoutTableShell({ data, pageCount }: PayoutTableShellProps) {
           id: "createdAt",
           title: "Fecha Pago",
         },
+        {
+          id: "amount",
+          title: "Monto",
+        },
       ]}
     />
   );

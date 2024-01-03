@@ -2,7 +2,6 @@ import { revalidatePath } from "next/cache";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { db } from "@/lib/db";
 import { getPageSession } from "@/lib/auth/lucia";
-import { checkAuth } from "@/lib/auth/utils";
 const f = createUploadthing();
 
 // FileRouter for your app, can contain multiple FileRoutes
@@ -12,10 +11,9 @@ export const ourFileRouter = {
     // Set permissions and file types for this FileRoute
     .middleware(async (req) => {
       // This code runs on your server before upload
-      const check = checkAuth;
-      // If you throw, the user will not be able to upload
-      if (check == null) throw new Error("Unauthorized");
       const sessionUser = await getPageSession();
+      // If you throw, the user will not be able to upload
+      if (sessionUser == null) throw new Error("Unauthorized");
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
       return { userId: sessionUser?.user.userId };
     })
