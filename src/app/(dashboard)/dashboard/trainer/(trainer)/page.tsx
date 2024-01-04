@@ -22,6 +22,7 @@ import { CommandShortcut } from "@/components/ui/command";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { DrawerDialog } from "@/components/ui/drawer-dialog";
 
 export default async function TrainerPage() {
   const session = await getPageSession();
@@ -46,9 +47,9 @@ export default async function TrainerPage() {
                   />
                 </Avatar>
                 <div className="space-y-1">
-                  <h3 className="text-lg font-semibold">{
-                    session?.user.username
-                  }</h3>
+                  <h3 className="text-lg font-semibold">
+                    {session?.user.username}
+                  </h3>
                   <Badge>Trainer Member</Badge>
                 </div>
               </div>
@@ -83,27 +84,14 @@ export default async function TrainerPage() {
           <h1 className="text-xl font-bold">
             Activa tu cuenta como trainer en simples pasos
           </h1>
-          <Drawer>
-            <DrawerTrigger asChild>
-              <Button>Activar Cuenta como Trainer</Button>
-            </DrawerTrigger>
-            <DrawerContent className="flex justify-center items-center ">
-              <DrawerHeader>
-                <DrawerTitle>Conviertete en Trainer</DrawerTitle>
-                <DrawerDescription>Hazlo Rapido y sencillo</DrawerDescription>
-              </DrawerHeader>
-              <NewTrainerForm
-                email={session?.user.email}
-                name={""}
-                phone={""}
-              />
-              <DrawerFooter className="flex justify-center items-center">
-                <DrawerClose>
-                  <Button variant="outline">Cancelar</Button>
-                </DrawerClose>
-              </DrawerFooter>
-            </DrawerContent>
-          </Drawer>
+
+          <DrawerDialog
+            buttonLabel="Continuar"
+            dialogTitle="Completa tu perfil"
+            dialogDescription="Completa tu perfil para poder activar tu cuenta como trainer"
+          >
+            <NewTrainerForm email={session?.user.email} name={""} phone={""} />
+          </DrawerDialog>
         </div>
       )}
     </>

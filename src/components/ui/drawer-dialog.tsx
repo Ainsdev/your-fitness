@@ -45,7 +45,7 @@ export function DrawerDialog({
         <DialogTrigger asChild>
           <Button>{buttonLabel}</Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-max">
           <DialogHeader>
             <DialogTitle>{dialogTitle}</DialogTitle>
             <DialogDescription>{dialogDescription}</DialogDescription>

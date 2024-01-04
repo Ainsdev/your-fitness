@@ -29,25 +29,25 @@ export default function PointsCard(props: Props) {
   return (
     <Card key="1" className="flex flex-col">
       <CardHeader className="w-full">
-        <CardTitle>Tu Plan</CardTitle>
+        <CardTitle>Tus Creditos</CardTitle>
         <CardDescription>Administra tu plan</CardDescription>
       </CardHeader>
       <CardContent className="grid grid-cols-1 sm:grid-cols-2 divide-x py-4 w-full space-y-2">
         <div className="flex flex-col space-y-2 p-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold">Creditos Disponibles</h2>
-            <p className="text-2xl font-bold">{props.points}</p>
+          <div className="flex items-center justify-start">
+            <h2 className="text-lg">Creditos Disponibles:</h2>
+            <p className="text-lg font-bold">{props.points}k</p>
           </div>
           <div className="flex gap-2">
             <Button>Comprar Creditos</Button>
             <Button variant="link">Mas info</Button>
           </div>
         </div>
-        <div className="flex flex-col space-y-2 p-4 border-2">
+        <div className="flex flex-col space-y-2 p-4">
           <div className="flex items-center justify-between">
-            <h2 className="sm:text-xl text-lg font-bold">
+            <h2 className="sm:text-xl text-lg">
               Mi Plan:
-              <span className="text-sm font-normal">{props.plan}</span>
+              <span className="text-lg font-semibold">{props.plan}</span>
             </h2>
             <Badge variant={props.planStatus ? "secondary" : "destructive"}>
               {props.planStatus ? "Activo" : "Inactivo"}
