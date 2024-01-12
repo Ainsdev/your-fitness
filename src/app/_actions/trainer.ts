@@ -25,7 +25,7 @@ export const doTrainerForm = async (schema: FormValue) => {
       data: {
         trainer_active: true,
         bank_active: true,
-        username: schema.name,  
+        username: schema.name,
         name: schema.bank.accountbank_name,
         phone: schema.phone,
         rut: schema.rut,
@@ -33,9 +33,9 @@ export const doTrainerForm = async (schema: FormValue) => {
         bankAccount: {
           create: {
             accountbank_name: schema.bank.accountbank_name,
-            accountbank_num: schema.bank.accountbank_num,
-            accountbank_type: schema.bank.accountbank_type,
-            accountbank_sbif: schema.bank.accountbank_sbif,
+            accountbank_num: parseInt(schema.bank.accountbank_num),
+            accountbank_type: parseInt(schema.bank.accountbank_type),
+            accountbank_sbif: parseInt(schema.bank.accountbank_sbif),
             accountbank_personal_id: schema.rut,
           },
         },
@@ -49,7 +49,7 @@ export const doTrainerForm = async (schema: FormValue) => {
     console.log("Se creo el formulario");
     return delay();
   } catch (e) {
-    console.log("ERROR TPYE:",e);
+    console.log("ERROR TPYE:", e);
     throw new InternalServerError(
       "Algo Salio mal, revisa los datos ingresados"
     );

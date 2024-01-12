@@ -11,9 +11,9 @@ import { DollarSign, ViewIcon } from "lucide-react";
 
 export default function AnalyticsPage() {
   return (
-    <section className="pt-5 flex flex-col justify-center items-center sm:items-start w-full">
+    <section className="pt-5 flex flex-col justify-center items-center sm:items-start ">
       <h2 className="text-xl font-bold mb-4 self-start">Tus Estadisticas</h2>
-      <div className="grid 2xl:grid-cols-3 gap-4 grid-cols-2 sm:grid-cols-1">
+      <div className="grid 2xl:grid-cols-3 gap-4 grid-cols-2 lg:grid-cols-1">
         <Card className="p-2 hover:border-green-300 hover:border-2 transition-all ease-in-out duration-100">
           <CardHeader className="p-2">
             <CardTitle className="text-sm font-medium">

@@ -13,21 +13,20 @@ export function formatDate(date: Date | string | number) {
   }).format(new Date(date))
 }
 
-export function formatPrice(
-  price: number | string,
-  options: {
-    currency?: "USD" | "EUR" | "GBP" | "BDT"
-    notation?: Intl.NumberFormatOptions["notation"]
-  } = {}
-) {
-  const { currency = "USD", notation = "compact" } = options
+export function formatCredits(score: number): string {
+  let formattedScore = '';
+  
+  if (score >= 1000000) {
+      formattedScore = (score / 1000000).toFixed(2) + 'M';
+  } else if (score >= 1000) {
+      formattedScore = (score / 1000).toFixed(2) + 'k';
+  } else {
+      formattedScore = score.toString();
+  }
 
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency,
-    notation,
-  }).format(Number(price))
+  return formattedScore;
 }
+
 
 export function formatId(id: number) {
   return `#${id.toString().padStart(4, "0")}`

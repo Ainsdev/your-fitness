@@ -95,7 +95,7 @@ export interface StatusPayments {
 export type BankAccount = {
   accountbank_name: string;
   accountbank_personal_id: string;
-  accountbank_sbif: string;
-  accountbank_type: string;
-  accountbank_num: string;
+  accountbank_sbif: number;
+  accountbank_type: number;
+  accountbank_num: number;
 };

@@ -7,9 +7,9 @@ export const BankAccountModel = z.object({
   updatedAt: z.date(),
   trainerId: z.string(),
   accountbank_name: z.string(),
-  accountbank_sbif: z.string(),
-  accountbank_type: z.string(),
-  accountbank_num: z.string(),
+  accountbank_sbif: z.number().int(),
+  accountbank_type: z.number().int(),
+  accountbank_num: z.number().int(),
   accountbank_personal_id: z.string(),
 })
 

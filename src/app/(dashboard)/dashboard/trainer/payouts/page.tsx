@@ -1,18 +1,20 @@
 import PayoutForm from "@/components/forms/payout-request-form";
 import { PayoutTableShell } from "@/components/tables/payouts/payouts-table-shell";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
   CardContent,
+  CardFooter,
 } from "@/components/ui/card";
 import { DrawerDialog } from "@/components/ui/drawer-dialog";
 
 import { getPageSession } from "@/lib/auth/lucia";
 import { db } from "@/lib/db";
-import { Link } from "lucide-react";
+import { formatCredits } from "@/lib/utils";
+import Link from "next/link";
+
 import { redirect } from "next/navigation";
 interface PurchasesPageProps {
   searchParams: {
@@ -36,7 +38,7 @@ export default async function PayoutPage({ searchParams }: PurchasesPageProps) {
         : 0
       : 0;
   // Database Transaction
-  const { items, count } = await db.$transaction(async (tx) => {
+  const { items, count, credits, banks } = await db.$transaction(async (tx) => {
     const items = await tx.trainerPayout.findMany({
       where: {
         trainerId: session?.user.userId,
@@ -52,32 +54,59 @@ export default async function PayoutPage({ searchParams }: PurchasesPageProps) {
         trainerId: session?.user.userId,
       },
     });
-    return { items, count };
+    //Get credits atributte from credit table
+    const credits = await tx.credit.findFirst({
+      where: {
+        userId: session?.user.userId,
+      },
+    });
+    //Get bank accounts
+    const banks = await tx.bankAccount.findMany({
+      where: {
+        trainerId: session?.user.userId,
+      },
+    }); 
+    //OPTIMIZE: This query is not necessary, we can get the bank accounts from the user only when the user pulse the button to withdraw
+
+    return { items, count, credits, banks };
   });
 
-  const statuses = typeof status === "string" ? status.split(".") : [];
   const pageCount = Math.ceil(count / limit);
   return (
     <div className="flex flex-col justify-center items-center gap-8">
-      <div className="flex flex-col items-center justify-center gap-4">
-        <Card
-          id="credits"
-          aria-labelledby="credits"
-          className="flex justify-center items-center"
-        >
+      <div className="flex flex-col items-center justify-center gap-4 w-full">
+        <Card id="credits" aria-labelledby="credits" className="w-full">
           <CardHeader className="space-y-1">
-            <CardTitle className="line-clamp-1 text-xl">150.000 CLP</CardTitle>
-            <CardDescription>Disponibles para retirar</CardDescription>
+            <CardTitle className="line-clamp-1 text-xl">
+              {formatCredits(credits?.credits ? credits.credits : 0)}
+            </CardTitle>
+            <CardDescription>
+              {credits && credits.credits < 55000
+                ? "Debes tener al menos $55.000 para retirar fondos"
+                : "Disponibles para retirar"}
+            </CardDescription>
           </CardHeader>
           <CardContent className="p-2 px-4">
             <DrawerDialog
+              disabledButton={credits && credits.credits > 55000 ? true : false}
               buttonLabel="Retirar"
               dialogTitle="Retirar fondos"
               dialogDescription="Retira tus fondos a tu cuenta bancaria"
             >
-              <PayoutForm />
+              <PayoutForm
+                maxAmount={505000}
+                banks={banks}
+              />
             </DrawerDialog>
           </CardContent>
+          <CardFooter>
+            <Link
+              className="text-muted-foreground hover:underline text-xs italic"
+              href="https://help.lucia.app/es/articles/5346773-por-que-mi-saldo-es-negativo"
+            >
+              Porque no puedo retirar?
+            </Link>
+          </CardFooter>
         </Card>
       </div>
       <PayoutTableShell data={items} pageCount={pageCount} />

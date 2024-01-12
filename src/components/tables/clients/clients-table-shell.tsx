@@ -25,7 +25,6 @@ import { DataTableColumnHeader } from "../data-table-column-header";
 import { DataTable } from "../data-table";
 
 
-
 type Payout = {
   id: string;
   createdAt: Date;

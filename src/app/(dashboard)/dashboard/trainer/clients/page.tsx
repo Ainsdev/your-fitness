@@ -1,14 +1,8 @@
-import { columns } from "@/components/tables/clients/columns";
-import { DataTable } from "@/components/tables/clients/data-table";
 
-type Payment = {
-  id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
-};
 
-async function getData(): Promise<Payment[]> {
+
+
+async function getData(): Promise<any> {
   // Fetch data from your API here.
   return [
     {
@@ -35,7 +29,7 @@ export default async function ClientsPage() {
   const data = await getData();
   return (
     <div>
-      <DataTable columns={columns} data={data} />
+      {/* <DataTable columns={columns} data={data} /> */}
     </div>
   );
 }

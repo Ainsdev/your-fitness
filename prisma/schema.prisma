@@ -285,9 +285,9 @@ model BankAccount {
   trainerId               String
   trainer                 User     @relation(fields: [trainerId], references: [id], onDelete: Cascade)
   accountbank_name        String
-  accountbank_sbif        String
-  accountbank_type        String
-  accountbank_num         String
+  accountbank_sbif        Int
+  accountbank_type        Int
+  accountbank_num         Int
   accountbank_personal_id String
 
   @@index([trainerId])

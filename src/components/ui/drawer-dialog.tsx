@@ -30,11 +30,13 @@ export function DrawerDialog({
   buttonLabel,
   dialogTitle,
   dialogDescription,
+  disabledButton
 }: {
   children: React.ReactNode;
   buttonLabel: string;
   dialogTitle: string;
   dialogDescription: string;
+  disabledButton?: boolean;
 }) {
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -43,7 +45,7 @@ export function DrawerDialog({
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button>{buttonLabel}</Button>
+          <Button disabled={disabledButton}>{buttonLabel}</Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-max">
           <DialogHeader>
@@ -59,7 +61,7 @@ export function DrawerDialog({
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button>{buttonLabel}</Button>
+        <Button disabled={disabledButton}>{buttonLabel}</Button>
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="text-left">

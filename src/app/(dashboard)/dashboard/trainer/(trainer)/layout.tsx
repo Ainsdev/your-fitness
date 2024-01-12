@@ -35,7 +35,7 @@ export default async function StoreLayout({
   const session = await getPageSession();
   return (
       <>
-        <div className="flex justify-evenly items-center sm:items-start flex-col md:flex-row w-full">
+        <div className="flex justify-between items-center sm:items-start flex-col lg:flex-row w-full">
         {session?.user.trainer_active ? clients : null}
         {session?.user.trainer_active ? analytics : null}
         </div>
