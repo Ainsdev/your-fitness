@@ -7,6 +7,8 @@ export const CreditModel = z.object({
   updatedAt: z.date(),
   userId: z.string(),
   credits: z.number().int(),
+  hasPlan: z.boolean(),
+  plan: z.number().int().nullish(),
 })
 
 export interface CompleteCredit extends z.infer<typeof CreditModel> {

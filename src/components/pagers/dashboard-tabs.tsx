@@ -33,7 +33,7 @@ export function TrainerTabs() {
     },
     {
       title: "Ajustes",
-      href: `/dashboard/trainer/profile/settings`,
+      href: `/dashboard/trainer/settings`,
       isActive: segment === "settings",
     },
   ];

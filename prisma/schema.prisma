@@ -27,7 +27,7 @@ model Session {
   user_id        String
   active_expires BigInt
   idle_expires   BigInt
-  user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  user           User   @relation(references: [id], fields: [user_id])
 
   @@index([user_id])
 }
@@ -36,7 +36,7 @@ model Key {
   id              String  @id @unique
   hashed_password String?
   user_id         String
-  user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  user            User    @relation(references: [id], fields: [user_id])
 
   @@index([user_id])
 }
@@ -46,7 +46,7 @@ model VerificationCode {
   user_id String
   code    String
   expires DateTime
-  user    User     @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  user    User     @relation(references: [id], fields: [user_id])
 
   @@index([user_id])
   @@map(name: "verification_code")
@@ -56,7 +56,7 @@ model PasswordResetToken {
   id      String @id /// Token to send inside the reset link
   expires BigInt /// Expiration (in milliseconds) of the token
   user_id String
-  user    User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  user    User   @relation(references: [id], fields: [user_id])
 
   @@index([expires])
   @@index([user_id])
@@ -70,7 +70,7 @@ model User {
   username            String
   name                String?
   email               String?              @unique
-  emailVerified       DateTime?
+  email_verified      DateTime?
   phone               String?
   rut                 String?              @unique
   image               String?
@@ -89,8 +89,8 @@ model User {
   //TRAINER
   //
   trainer_active      Boolean              @default(false)
-  isAvailable         Boolean              @default(true) // If the trainer is aviable to take new students
   bank_active         Boolean              @default(false) // If the trainer has linked his bank account
+  // payku_id            String?              @unique
   trainerPost         TrainerPost[] // This is the post that the trainer can create to promote his services
   // Site      Site[]
   // ContractGroup       TrainerGroup[]
@@ -114,74 +114,75 @@ model User {
 }
 
 model TrainerPost {
-  id                  String   @id @default(uuid())
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @default(now())
+  id                  String     @id @default(uuid())
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @default(now())
   trainerId           String
-  trainer             User     @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+  trainer             User       @relation(fields: [trainerId], references: [id])
+  disabled            Boolean    @default(false) // If the post is disabled or not
   // 
-  level               Int      @default(1) // Level of the trainer (Experience)
-  plan                String   @default("BASIC") // BASIC, PREMIUM, ENTERPRISE, ALL 
-  specializations     Int // Types of sports that the trainer can teach e.g 1234 = 1: Football, 2: Basketball, 3: Tennis, 4: Volleyball
-  sub_specializations Int // Types of sports that the trainer can teach e.g 1234 = 1: Football, 2: Basketball, 3: Tennis, 4: Volleyball
-  methodology         String?  @default("ALL") // Methodology of the trainer e.g ALL, ONLINE, PRESENCIAL, IN GROUP
+  credits             Int // Number of credits that it cost per session
+  planId              Int? //payment plan id  
+  //
+  experience          Int        @default(1) // Level of experience of the training e.g 1: Beginner, 2: Intermediate, 3: Advanced
+  specialization      String // Types of sports that the trainer can teach by slug
+  sub_specializations String? // Types of sports that the trainer can teach e.g 1234 = 1: Football, 2: Basketball, 3: Tennis, 4: Volleyball
+  methodology         String?    @default("ALL") // Methodology of the trainer e.g ALL, ONLINE, PRESENCIAL, IN GROUP
   phone               String
-  img                 String?
+  images              Json
+  name                String
   social_medias       String? // [] of social medias
   //Contract
-  free_days           Int      @default(1) // Number of free sessions that the trainer includes
-  default_days        Int      @default(3) // Number of days that the trainer recommends to train with him per week
-  default_hours       Int      @default(2) // Number of hours that the trainer recommends to train with him per session
+  free_days           Int        @default(1) // Number of free sessions that the trainer includes
+  default_days        Int        @default(3) // Number of days that the trainer recommends to train with him per week
+  default_hours       Int        @default(2) // Number of hours that the trainer recommends to train with him per session
   // discount_at         Int             @default(100) // Minimum number of students to apply a discount
   // discount            Int             @default(0) // Discount that the trainer applies when the number of students is equal or greater than discount_at
   //Texts
   title               String
   bio                 String?
   course_info         String?
+  location            String? // Location of the trainer e.g "Las Condes, Santiago, Chile"
+  // primary_color       String?  @default("#000000")
+  // free_files          String? // [] of files MAX 3 (PDF,IMAGES...)
+  Contract            Contract[]
 
   @@index([trainerId])
+  @@index([location])
+  @@index([specialization])
 }
 
-// model Site {
-//   id           String   @id @default(cuid())
-//   name         String?
-//   description  String?
-//   logo         String?  @default("https://public.blob.vercel-storage.com/eEZHAoPTOBSYGBE3/JRajRyC-PhBHEinQkupt02jqfKacBVHLWJq7Iy.png")
-//   color        String?  @default("")
-//   image        String?  @default("https://public.blob.vercel-storage.com/eEZHAoPTOBSYGBE3/hxfcV5V-eInX3jbVUhjAt1suB7zB88uGd1j20b.png")
-//   subdomain    String?  @unique
-//   customDomain String?  @unique
-//   createdAt    DateTime @default(now())
-//   updatedAt    DateTime @updatedAt
-//   trainer      Trainer  @relation(fields: [trainerId], references: [id], onDelete: Cascade)
-//   trainerId    String
-//   // features     Feature[]
-//   // posts        Post[]
-
-//   @@index([trainerId])
-// }
-
 model Contract {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-  finishAt  DateTime // Date when the contract expires, make a function to calculate when is the expiration date
-  userId    String // User that is paying the contract
-  user      User     @relation("user_contract", fields: [userId], references: [id], onDelete: Cascade)
-  trainerId String // Trainer that is receiving the contract
-  trainer   User     @relation("trainer_contract", fields: [trainerId], references: [id], onDelete: Cascade)
-  // 
-  status    Boolean  @default(true) // If the contract is active live or not
-  canceled  Boolean  @default(false) // If the contract get canceled or not (By the user)
-  plan      String   @default("BASIC") // BASIC, PREMIUM, ENTERPRISE, ALL
-  days      Int? // Number of days that the contract includes e.g 135 = 1: Monday, 3: Wednesday, 5: Friday
-  hours     Int? // Number of hours that the contract includes e.g 12 = 1: 1 hour, 2: 2 hours
-  credits   Int // Number of credits that the contract includes
-
-  // The credits show to the trainer to make a payout with a query with this restrictions:  1. The contract is canceled=false 2. the contract has finished 3. trainerId = trainerId 
+  id             String       @id @default(uuid())
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @default(now())
+  finishAt       DateTime // Date when the contract expires, make a function to calculate when is the expiration date
+  cancelationAt  DateTime? // Date when the contract have been canceled
+  //
+  userId         String // User that is paying the contract
+  user           User         @relation("user_contract", fields: [userId], references: [id])
+  user_name      String
+  user_phone     String
+  trainerId      String // Trainer that is receiving the contract
+  trainer        User         @relation("trainer_contract", fields: [trainerId], references: [id])
+  trainer_name   String
+  trainer_phone  String
+  postId         String? // Post that the user is buying
+  post           TrainerPost? @relation(fields: [postId], references: [id])
+  // Plan, price and payment
+  plan           Int?
+  total_credits  Int // Total credits that the client bought
+  // hours_credits  Int // Number of hours that the client bought
+  days           Int // Number of days that client bought
+  //
+  canceled       Boolean      @default(false) // If the contract can be canceled or not
+  //Schedule
+  schedule_days  Int? // Number of days that the contract includes e.g 135 = 1: Monday, 3: Wednesday, 5: Friday
+  shcedule_hours Int? // Number of hours that the contract includes e.g 12 = 1: 1 hour, 2: 2 hours
 
   @@index([trainerId])
   @@index([userId])
+  @@index([postId])
 }
 
 // model TrainerGroup {
@@ -190,7 +191,7 @@ model Contract {
 //   updatedAt   DateTime @default(now())
 //   finishAt    DateTime // Date when the contract expires, make a function to calculate when is the expiration date
 //   trainerId   String
-//   trainer     Trainer  @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+//   trainer     Trainer  @relation(fields: [trainerId], references: [id])
 //   // 
 //   title       String
 //   description String?
@@ -218,8 +219,8 @@ model Review {
   comment   String
   createdAt DateTime @default(now())
 
-  user    User @relation("user_review", fields: [userId], references: [id], onDelete: Cascade)
-  trainer User @relation("trainer_review", fields: [trainerId], references: [id], onDelete: Cascade)
+  user    User @relation("user_review", fields: [userId], references: [id])
+  trainer User @relation("trainer_review", fields: [trainerId], references: [id])
 
   @@index([userId])
   @@index([trainerId])
@@ -232,8 +233,10 @@ model Credit {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
   credits   Int      @default(0)
+  hasPlan   Boolean  @default(false) // If the user has a plan or not
+  plan      Int? // Plan of the user e.g "BASIC", "PREMIUM", "ELITE"
 
   @@index([userId])
 }
@@ -243,7 +246,7 @@ model CreditPurchase {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @default(now())
   userId        String
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user          User     @relation(fields: [userId], references: [id])
   amount        Float    @default(0) // Amount of money that the user paid
   credits       Int      @default(0) // Amount of credits that the user bought
   transactionId String? // ID of the transaction
@@ -257,7 +260,7 @@ model CreditPurchase {
 //   createdAt          DateTime @default(now())
 //   endsAt             DateTime
 //   userId             String
-//   user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+//   user               User     @relation(fields: [userId], references: [id])
 //   payku_id           String   @unique
 //   payku_subscription String?  @unique
 //   plan               String   @default("BASIC")
@@ -271,7 +274,7 @@ model TrainerPayout {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   trainerId String
-  trainer   User     @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+  trainer   User     @relation(fields: [trainerId], references: [id])
   amount    Float
   status    String   @default("PENDING") // PENDING, PAID, REJECTED
 
@@ -283,7 +286,7 @@ model BankAccount {
   createdAt               DateTime @default(now())
   updatedAt               DateTime @default(now())
   trainerId               String
-  trainer                 User     @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+  trainer                 User     @relation(fields: [trainerId], references: [id])
   accountbank_name        String
   accountbank_sbif        Int
   accountbank_type        Int
@@ -299,7 +302,7 @@ model BankAccount {
 //   icon      String?
 //   createdAt DateTime @default(now())
 //   updatedAt DateTime @updatedAt
-//   site      Site?    @relation(fields: [siteId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+//   site      Site?    @relation(fields: [siteId], references: [id], onUpdate: Cascade)
 //   siteId    String?
 
 //   @@index([siteId])
@@ -315,7 +318,7 @@ model BankAccount {
 //   createdAt   DateTime @default(now())
 //   updatedAt   DateTime @updatedAt
 //   published   Boolean  @default(false)
-//   site        Site?    @relation(fields: [siteId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+//   site        Site?    @relation(fields: [siteId], references: [id], onUpdate: Cascade)
 //   siteId      String?
 //   User        User?    @relation(fields: [userId], references: [id])
 //   userId      String?
@@ -344,8 +347,8 @@ model BankAccount {
 //   createdAt DateTime @default(now())
 //   updatedAt DateTime @default(now())
 
-//   team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
-//   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+//   team Team @relation(fields: [teamId], references: [id])
+//   user User @relation(fields: [userId], references: [id])
 
 //   @@unique([teamId, userId])
 //   @@index([userId])
@@ -361,8 +364,8 @@ model BankAccount {
 //   createdAt DateTime @default(now())
 //   updatedAt DateTime @default(now())
 
-//   user User @relation(fields: [invitedBy], references: [id], onDelete: Cascade)
-//   team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+//   user User @relation(fields: [invitedBy], references: [id])
+//   team Team @relation(fields: [teamId], references: [id])
 
 //   @@unique([teamId, email])
 // }

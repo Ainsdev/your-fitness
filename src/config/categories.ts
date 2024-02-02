@@ -1,3 +1,4 @@
+import { Badge } from "@/components/ui/badge";
 import { CategoryProps } from "@/lib/types";
 
 export const categoriesList: CategoryProps[] = [
@@ -89,3 +90,13 @@ export const categoriesList: CategoryProps[] = [
     ],
   },
 ];
+
+//function to get a category by slug
+export const getCategoryBySlug = (slug: string) => {
+  return categoriesList.find((category) => category.slug === slug);
+};
+
+//function to get subcategories by number
+export const getSubcategoriesByIndices = (objeto: CategoryProps, indices: string) =>{
+  return indices.split('').map(index => objeto.subcategories[parseInt(index)]);
+}

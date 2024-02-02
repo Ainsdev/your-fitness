@@ -1,24 +1,31 @@
 import * as z from "zod"
-import { CompleteUser, RelatedUserModel } from "./index"
+import { CompleteUser, RelatedUserModel, CompleteTrainerPost, RelatedTrainerPostModel } from "./index"
 
 export const ContractModel = z.object({
   id: z.string(),
   createdAt: z.date(),
   updatedAt: z.date(),
   finishAt: z.date(),
+  cancelationAt: z.date().nullish(),
   userId: z.string(),
+  user_name: z.string(),
+  user_phone: z.string(),
   trainerId: z.string(),
-  status: z.boolean(),
+  trainer_name: z.string(),
+  trainer_phone: z.string(),
+  postId: z.string().nullish(),
+  plan: z.number().int(),
+  total_credits: z.number().int(),
+  days: z.number().int(),
   canceled: z.boolean(),
-  plan: z.string(),
-  days: z.number().int().nullish(),
-  hours: z.number().int().nullish(),
-  credits: z.number().int(),
+  schedule_days: z.number().int().nullish(),
+  shcedule_hours: z.number().int().nullish(),
 })
 
 export interface CompleteContract extends z.infer<typeof ContractModel> {
   user: CompleteUser
   trainer: CompleteUser
+  post?: CompleteTrainerPost | null
 }
 
 /**
@@ -29,4 +36,5 @@ export interface CompleteContract extends z.infer<typeof ContractModel> {
 export const RelatedContractModel: z.ZodSchema<CompleteContract> = z.lazy(() => ContractModel.extend({
   user: RelatedUserModel,
   trainer: RelatedUserModel,
+  post: RelatedTrainerPostModel.nullish(),
 }))

@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { dashboardConfig } from "@/config/dashboard";
 import { getPageSession } from "@/lib/auth/lucia";
 import { getUserAuth } from "@/lib/auth/utils";
+import { HomeIcon } from "@radix-ui/react-icons";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function DashboardLayout({
@@ -27,47 +29,37 @@ export default async function DashboardLayout({
         </nav>
         <div className="flex flex-col flex-1 ml-4">{children}</div>
       </main>
-      <footer className="fixed bottom-0 left-0 right-0 md:hidden border-t h-16 flex items-center justify-around">
+      <footer className="fixed bottom-0 left-0 right-0 md:hidden border-t h-16 flex items-center justify-around bg-background">
         <Button size="icon" variant="outline">
-          <svg
-            className=" w-6 h-6 "
-            fill="none"
-            height="24"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-            width="24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-            <polyline points="9 22 9 12 15 12 15 22" />
-          </svg>
+          <Link href="/dashboard/account">
+            <HomeIcon />
+          </Link>
           <span className="sr-only">Home</span>
         </Button>
         <Button size="icon" variant="outline">
-          <svg
-            className=" w-6 h-6 "
-            fill="none"
-            height="24"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-            width="24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="m6.5 6.5 11 11" />
-            <path d="m21 21-1-1" />
-            <path d="m3 3 1 1" />
-            <path d="m18 22 4-4" />
-            <path d="m2 6 4-4" />
-            <path d="m3 10 7-7" />
-            <path d="m14 21 7-7" />
-          </svg>
-          <span className="sr-only">Workouts</span>
+          <Link href="/dashboard/trainer">
+            <svg
+              className=" w-6 h-6 "
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="m6.5 6.5 11 11" />
+              <path d="m21 21-1-1" />
+              <path d="m3 3 1 1" />
+              <path d="m18 22 4-4" />
+              <path d="m2 6 4-4" />
+              <path d="m3 10 7-7" />
+              <path d="m14 21 7-7" />
+            </svg>
+          </Link>
+          <span className="sr-only">Trainer</span>
         </Button>
         <Button size="icon" variant="outline">
           <svg

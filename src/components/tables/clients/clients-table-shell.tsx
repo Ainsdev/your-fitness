@@ -6,14 +6,7 @@ import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { type ColumnDef } from "@tanstack/react-table";
 import { z } from "zod";
 
-import {
-  cn,
-  formatDate,
-  formatId,
-  formatCredits,
-  paymentStatus,
-} from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
+import { formatDate, formatId, formatCredits } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -24,25 +17,27 @@ import {
 import { DataTableColumnHeader } from "../data-table-column-header";
 import { DataTable } from "../data-table";
 
-
-type Payout = {
+type Contract = {
   id: string;
-  createdAt: Date;
-  updatedAt: Date;
-  trainerId: string;
-  amount: number;
-  status: string;
+  user_name: string;
+  user_phone: string;
+  createdAt: string;
+  finishAt: string;
+  specialization: string;
+  total_credits: number;
 };
 
-
-interface PayoutTableShellProps {
-  data: Payout[];
+interface ContractTableShellProps {
+  data: Contract[] | any; //TODO: Fix any
   pageCount: number;
 }
 
-export function PayoutTableShell({ data, pageCount }: PayoutTableShellProps) {
+export function ContractTableShell({
+  data,
+  pageCount,
+}: ContractTableShellProps) {
   // Memoize the columns so they don't re-render on every render
-  const columns = React.useMemo<ColumnDef<Payout, unknown>[]>(
+  const columns = React.useMemo<ColumnDef<Contract, unknown>[]>(
     () => [
       {
         accessorKey: "id",
@@ -54,46 +49,49 @@ export function PayoutTableShell({ data, pageCount }: PayoutTableShellProps) {
         },
       },
       {
-        accessorKey: "status",
+        accessorKey: "user_name",
         header: ({ column }) => (
-          <DataTableColumnHeader column={column} title="Estado" />
+          <DataTableColumnHeader column={column} title="Nombre" />
         ),
         cell: ({ cell }) => {
-          return (
-            <Badge
-              variant="outline"
-              className={cn(
-                "pointer-events-none text-sm capitalize text-white",
-                paymentStatus({
-                  status: cell.getValue() as
-                    | "PENDING"
-                    | "PAID"
-                    | "FAILED"
-                    | "REJECTED",
-                  shade: 600,
-                })
-              )}
-            >
-              {String(cell.getValue())}
-            </Badge>
-          );
+          return <p>{cell.getValue() as string}</p>;
         },
       },
       {
-        accessorKey: "amount",
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} title="Monto" />
-        ),
-        cell: ({ cell }) => formatCredits(cell.getValue() as number),
-      },
-
-      {
         accessorKey: "createdAt",
         header: ({ column }) => (
-          <DataTableColumnHeader column={column} title="Fecha Pago" />
+          <DataTableColumnHeader column={column} title="Fecha(Inicio)" />
         ),
-        cell: ({ cell }) => formatDate(cell.getValue() as Date),
-        enableColumnFilter: false,
+        cell: ({ cell }) => {
+          return <span>{formatDate(cell.getValue() as string)}</span>;
+        },
+      },
+      {
+        accessorKey: "finishAt",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Fecha(Fin)" />
+        ),
+        cell: ({ cell }) => {
+          return <span>{formatDate(cell.getValue() as string)}</span>;
+        },
+      },
+      {
+        accessorKey: "total_credits",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Pago" />
+        ),
+        cell: ({ cell }) => {
+          return <span>{formatCredits(cell.getValue() as number)}</span>;
+        },
+      },
+      {
+        accessorKey: "specialization",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Deporte" />
+        ),
+        cell: ({ cell }) => {
+          return <span>{cell.getValue() as string}</span>;
+        },
       },
       {
         id: "actions",
@@ -110,9 +108,19 @@ export function PayoutTableShell({ data, pageCount }: PayoutTableShellProps) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[160px]">
               <DropdownMenuItem asChild>
-                <Link href={`/dashboard/trainer/payouts/${row.original.id}`}>
+                <Link href={`/dashboard/trainer/Contracts/${row.original.id}`}>
                   Ver Detalle
                 </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link
+                  href={`https://api.whatsapp.com/send?phone=${row.original.user_phone}`}
+                >
+                  Enviar Mensaje
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href={`tel:${row.original.user_phone}`}>Llamar</Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -133,8 +141,12 @@ export function PayoutTableShell({ data, pageCount }: PayoutTableShellProps) {
           title: "Fecha Pago",
         },
         {
-          id: "amount",
-          title: "Monto",
+          id: "id",
+          title: "ID",
+        },
+        {
+          id: "specialization",
+          title: "Deporte",
         },
       ]}
     />
