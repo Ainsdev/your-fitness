@@ -26,11 +26,11 @@ export default function ProfilePage() {
               </div>
             </CardContent>
             <CardFooter className="flex items-center justify-end gap-2">
-              <Button asChild variant="outline">
+              <Button asChild variant="ghost">
                 <Link href="/dashboard/trainer/profile/1">Editar</Link>
               </Button>
-              <Button size="sm" variant="destructive">
-                Pausar
+              <Button size="sm" variant="ghost">
+                Compartir
               </Button>
             </CardFooter>
           </Card>

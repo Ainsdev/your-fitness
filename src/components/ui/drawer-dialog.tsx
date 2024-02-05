@@ -1,5 +1,4 @@
-'use client'
-
+"use client";
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
@@ -27,16 +26,14 @@ import { useMediaQuery } from "../hooks/useMediaQuery";
 
 export function DrawerDialog({
   children,
-  buttonLabel,
+  button,
   dialogTitle,
   dialogDescription,
-  disabledButton
 }: {
   children: React.ReactNode;
-  buttonLabel: string;
+  button: React.ReactNode;
   dialogTitle: string;
   dialogDescription: string;
-  disabledButton?: boolean;
 }) {
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -45,7 +42,7 @@ export function DrawerDialog({
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button disabled={disabledButton}>{buttonLabel}</Button>
+          {button}
         </DialogTrigger>
         <DialogContent className="sm:max-w-max">
           <DialogHeader>
@@ -61,9 +58,9 @@ export function DrawerDialog({
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button disabled={disabledButton}>{buttonLabel}</Button>
+        {button}
       </DrawerTrigger>
-      <DrawerContent>
+      <DrawerContent className="h-screen ">
         <DrawerHeader className="text-left">
           <DrawerTitle>{dialogTitle}</DrawerTitle>
           <DrawerDescription>{dialogDescription}</DrawerDescription>

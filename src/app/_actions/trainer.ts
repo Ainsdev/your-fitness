@@ -9,7 +9,7 @@ import { delay } from "@/lib/security";
 import { z } from "zod";
 
 type FormValue = z.infer<typeof trainerForm>;
-
+//Function to complete a form to be a trainer
 export const doTrainerForm = async (schema: FormValue) => {
   const session = await getPageSession();
   try {
@@ -47,6 +47,49 @@ export const doTrainerForm = async (schema: FormValue) => {
       },
     });
     console.log("Se creo el formulario");
+    return delay();
+  } catch (e) {
+    console.log("ERROR TPYE:", e);
+    throw new InternalServerError(
+      "Algo Salio mal, revisa los datos ingresados"
+    );
+  }
+};
+
+export const doPausePost = async (id: string, bool: boolean) => {
+  const session = await getPageSession();
+  try {
+    if (!session || !session.user.trainer_active) {
+      throw new InternalServerError("No se pudo pausar el post");
+    }
+    await db.trainerPost.update({
+      where: {
+        id: id,
+      },
+      data: {
+        disabled: bool,
+      },
+    });
+    return delay();
+  } catch (e) {
+    console.log("ERROR TPYE:", e);
+    throw new InternalServerError(
+      "Algo Salio mal, revisa los datos ingresados"
+    );
+  }
+};
+
+export const doDeletePost = async (id: string) => {
+  const session = await getPageSession();
+  try {
+    if (!session || !session.user.trainer_active) {
+      throw new InternalServerError("No se pudo eliminar el post");
+    }
+    await db.trainerPost.delete({
+      where: {
+        id: id,
+      },
+    });
     return delay();
   } catch (e) {
     console.log("ERROR TPYE:", e);

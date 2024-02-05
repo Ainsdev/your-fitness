@@ -65,7 +65,7 @@ export default async function PayoutPage({ searchParams }: PurchasesPageProps) {
       where: {
         trainerId: session?.user.userId,
       },
-    }); 
+    });
     //OPTIMIZE: This query is not necessary, we can get the bank accounts from the user only when the user pulse the button to withdraw
 
     return { items, count, credits, banks };
@@ -88,15 +88,18 @@ export default async function PayoutPage({ searchParams }: PurchasesPageProps) {
           </CardHeader>
           <CardContent className="p-2 px-4">
             <DrawerDialog
-              disabledButton={credits && credits.credits > 55000 ? true : false}
-              buttonLabel="Retirar"
+              button={
+                <button
+                  disabled={credits && credits.credits > 55000 ? true : false}
+                  className="btn btn-primary w-full"
+                >
+                  Retirar fondos
+                </button>
+              }
               dialogTitle="Retirar fondos"
               dialogDescription="Retira tus fondos a tu cuenta bancaria"
             >
-              <PayoutForm
-                maxAmount={505000}
-                banks={banks}
-              />
+              <PayoutForm maxAmount={505000} banks={banks} />
             </DrawerDialog>
           </CardContent>
           <CardFooter>

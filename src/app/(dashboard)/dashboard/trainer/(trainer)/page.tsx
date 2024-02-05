@@ -86,7 +86,11 @@ export default async function TrainerPage() {
           </h1>
 
           <DrawerDialog
-            buttonLabel="Continuar"
+            button={
+              <Button size="lg" variant="default">
+                Completar Perfil
+              </Button>
+            }
             dialogTitle="Completa tu perfil"
             dialogDescription="Completa tu perfil para poder activar tu cuenta como trainer"
           >
