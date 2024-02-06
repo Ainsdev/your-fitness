@@ -114,42 +114,42 @@ model User {
 }
 
 model TrainerPost {
-  id                  String     @id @default(uuid())
-  createdAt           DateTime   @default(now())
-  updatedAt           DateTime   @default(now())
-  trainerId           String
-  trainer             User       @relation(fields: [trainerId], references: [id])
-  disabled            Boolean    @default(false) // If the post is disabled or not
+  id            String     @id @default(uuid())
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @default(now())
+  trainerId     String
+  trainer       User       @relation(fields: [trainerId], references: [id])
+  disabled      Boolean    @default(false) // If the post is disabled or not
   // 
-  credits             Int // Number of credits that it cost per session
-  planId              Int? //payment plan id  
+  credits       Int // Number of credits that it cost per session
+  planId        Int? //payment plan id  
   //
-  experience          Int        @default(1) // Level of experience of the training e.g 1: Beginner, 2: Intermediate, 3: Advanced
-  specialization      String // Types of sports that the trainer can teach by slug
-  sub_specializations String? // Types of sports that the trainer can teach e.g 1234 = 1: Football, 2: Basketball, 3: Tennis, 4: Volleyball
-  methodology         String?    @default("ALL") // Methodology of the trainer e.g ALL, ONLINE, PRESENCIAL, IN GROUP
-  phone               String
-  images              Json
-  name                String
-  social_medias       String? // [] of social medias
+  experience    Int        @default(1) // Level of experience of the training e.g 1: Beginner, 2: Intermediate, 3: Advanced
+  category      String // Types of sports that the trainer can teach by slug
+  subcategory   String? // Types of sports that the trainer can teach e.g 1234 = 1: Football, 2: Basketball, 3: Tennis, 4: Volleyball
+  methodology   String?    @default("ALL") // Methodology of the trainer e.g ALL, ONLINE, PRESENCIAL, IN GROUP
+  phone         String
+  images        Json
+  name          String
+  social_medias String? // [] of social medias
   //Contract
-  free_days           Int        @default(1) // Number of free sessions that the trainer includes
-  default_days        Int        @default(3) // Number of days that the trainer recommends to train with him per week
-  default_hours       Int        @default(2) // Number of hours that the trainer recommends to train with him per session
+  free_days     Int        @default(1) // Number of free sessions that the trainer includes
+  default_days  Int        @default(3) // Number of days that the trainer recommends to train with him per week
+  default_hours Int        @default(2) // Number of hours that the trainer recommends to train with him per session
   // discount_at         Int             @default(100) // Minimum number of students to apply a discount
   // discount            Int             @default(0) // Discount that the trainer applies when the number of students is equal or greater than discount_at
   //Texts
-  title               String
-  bio                 String?
-  course_info         String?
-  location            String? // Location of the trainer e.g "Las Condes, Santiago, Chile"
+  title         String
+  bio           String?
+  course_info   String?
+  location      String? // Location of the trainer e.g "Las Condes, Santiago, Chile"
   // primary_color       String?  @default("#000000")
   // free_files          String? // [] of files MAX 3 (PDF,IMAGES...)
-  Contract            Contract[]
+  Contract      Contract[]
 
   @@index([trainerId])
   @@index([location])
-  @@index([specialization])
+  @@index([category])
 }
 
 model Contract {

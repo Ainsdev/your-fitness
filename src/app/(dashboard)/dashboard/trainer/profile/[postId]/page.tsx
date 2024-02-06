@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import PostEditComponent from "../_components/post";
+import PostComponent from "../_components/post";
 import { PauseIcon, TrashIcon } from "@radix-ui/react-icons";
 import { EditIcon, PercentIcon } from "lucide-react";
 import Link from "next/link";
@@ -28,7 +28,7 @@ export default function NamePage({ params }: { params: { postId: string } }) {
       <div className="flex flex-col items-center space-y-2">
         <h2 className="text-2xl font-bold">Tu Publicacion {params.postId}</h2>
         <Button size="sm" variant="link" asChild>
-          <Link href="/dashboard/trainer/profile"> Ver Post </Link>
+          <Link href="/dashboard/trainer/profile"> Compartir Post </Link>
         </Button>
       </div>
       <div className="w-full max-w-md bg-card  rounded-lg shadow-md p-6 space-y-4">
@@ -59,7 +59,7 @@ export default function NamePage({ params }: { params: { postId: string } }) {
                 dialogTitle="Editar Publicacion"
                 dialogDescription="Edita tu publicacion"
               >
-                <PostEditComponent />
+                <PostComponent />
               </DrawerDialog>
             </TooltipTrigger>
             <TooltipContent>
@@ -82,7 +82,7 @@ export default function NamePage({ params }: { params: { postId: string } }) {
         </TooltipProvider> */}
         <DeletePost />
       </div>
-      <PostEditComponent />
+      <PostComponent />
     </div>
   );
 }

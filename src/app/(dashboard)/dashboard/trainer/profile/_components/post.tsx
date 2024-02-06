@@ -18,7 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const subcategories = ["Cloud", "Kubernetes", "DevOps", "SRE", "Tech", "IT"];
 
-export default function PostEditComponent() {
+export default function PostComponent() {
   return (
     <div
       key="1"
