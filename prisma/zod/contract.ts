@@ -14,7 +14,7 @@ export const ContractModel = z.object({
   trainer_name: z.string(),
   trainer_phone: z.string(),
   postId: z.string().nullish(),
-  plan: z.number().int(),
+  plan: z.number().int().nullish(),
   total_credits: z.number().int(),
   days: z.number().int(),
   canceled: z.boolean(),

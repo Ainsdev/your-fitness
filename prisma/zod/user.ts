@@ -7,7 +7,7 @@ export const UserModel = z.object({
   username: z.string(),
   name: z.string().nullish(),
   email: z.string().nullish(),
-  emailVerified: z.date().nullish(),
+  email_verified: z.date().nullish(),
   phone: z.string().nullish(),
   rut: z.string().nullish(),
   image: z.string().nullish(),
@@ -16,7 +16,6 @@ export const UserModel = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
   trainer_active: z.boolean(),
-  isAvailable: z.boolean(),
   bank_active: z.boolean(),
 })
 

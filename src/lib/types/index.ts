@@ -1,5 +1,6 @@
 
 import { Icons } from "@/components/icons";
+import { FileWithPath } from "@uploadthing/react";
 
 type SubcategoryProps = {
   title: string;
@@ -99,3 +100,13 @@ export type BankAccount = {
   accountbank_type: number;
   accountbank_num: number;
 };
+
+export type FileWithPreview = FileWithPath & {
+  preview: string
+}
+
+export interface StoredFile {
+  id: string
+  name: string
+  url: string
+}

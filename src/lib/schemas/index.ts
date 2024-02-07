@@ -38,7 +38,7 @@ export const newTrainerPost = z.object({
   default_days: z.number().optional(),
   default_hours: z.number().optional(),
   title: z.string().min(8, { message: "El titulo es muy corto" }),
-  description: z.string().min(15, { message: "La descripcion es muy corta" }),
+  bio: z.string().min(15, { message: "La descripcion es muy corta" }),
   course_info: z.string().min(10, { message: "La informacion del curso es muy corta" }),
   location: z.string(),
 });

@@ -25,7 +25,7 @@ export const ourFileRouter = {
       });
       revalidatePath("/dashboard/account");
     }),
-    postImage : f({ image: { maxFileSize: "4MB"} })
+  postImage: f({ image: { maxFileSize: "4MB" } })
     .middleware(async (req) => {
       const sessionUser = await getPageSession();
       if (sessionUser == null) throw new Error("Unauthorized");
@@ -33,9 +33,9 @@ export const ourFileRouter = {
     })
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
-      console.log("Upload complete for userId:", metadata.userId)
+      console.log("Upload complete for userId:", metadata.userId);
 
-      console.log("file url", file.url)
+      console.log("file url", file.url);
     }),
 } satisfies FileRouter;
 
