@@ -1,8 +1,20 @@
+import PostNewComponent from "@/components/forms/post-new-form";
+import { getPageSession } from "@/lib/auth/lucia";
 
-export default function NewPostPage() {
+export default async function NewPostPage() {
+  const session = await getPageSession();
+
   return (
-    <div>
-      <h1>New Post Page</h1>
+    <div className="w-full h-full">
+      <PostNewComponent 
+      params={
+        { 
+          name: session?.user.name || "name",
+          image: session?.user.image || "",
+          location: session?.user.location || "",
+        }
+      }
+      />
     </div>
   );
 }

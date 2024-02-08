@@ -100,3 +100,8 @@ export const getCategoryBySlug = (slug: string) => {
 export const getSubcategoriesByIndices = (objeto: CategoryProps, indices: string) =>{
   return indices.split('').map(index => objeto.subcategories[parseInt(index)]);
 }
+
+//function to get all the subcategories of a category
+export const getAllSubcategories = (category: CategoryProps) => {
+  return category.subcategories;
+};
