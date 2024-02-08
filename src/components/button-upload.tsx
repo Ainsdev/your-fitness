@@ -3,7 +3,7 @@ import { UploadButton } from "@/lib/uploadthing";
 
 const ButtonUpload = (props: any) => {
     return <UploadButton
-    endpoint="imageUploader"
+    endpoint="userImage"
     onClientUploadComplete={(res) => {
       // Do something with the response
       console.log("Files: ", res);
